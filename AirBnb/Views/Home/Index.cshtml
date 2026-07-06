@@ -1,8 +1,29 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Project Overview";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="surface-card mb-3">
+    <h1 class="h3">AirBnb Clone - Eğitim Proje Şablonu</h1>
+    <p class="text-muted mb-0">
+        Bu başlangıç yapısı; layout, modül menüsü ve örnek MVC akışını içerir. Veritabanı, migration,
+        CRUD ve ekranların detay implementasyonu stajyer geliştirici tarafından tamamlanacaktır.
+    </p>
+</section>
+
+<section class="surface-card mb-3">
+    <h2 class="h5 mb-3">ER Diyagramına Göre Çalışılacak Modüller</h2>
+    <div class="row g-3">
+        <div class="col-md-6 col-xl-4"><div class="border rounded p-3 h-100">Users</div></div>
+        <div class="col-md-6 col-xl-4"><div class="border rounded p-3 h-100">Listings</div></div>
+        <div class="col-md-6 col-xl-4"><div class="border rounded p-3 h-100">ListingImages</div></div>
+        <div class="col-md-6 col-xl-4"><div class="border rounded p-3 h-100">Availability</div></div>
+        <div class="col-md-6 col-xl-4"><div class="border rounded p-3 h-100">Reservations</div></div>
+        <div class="col-md-6 col-xl-4"><div class="border rounded p-3 h-100">Payments / Reviews</div></div>
+    </div>
+</section>
+
+<section class="surface-card">
+    <h2 class="h5 mb-3">Örnek Sayfa</h2>
+    <p class="mb-3">Controller + ViewModel + View örneği için aşağıdaki sayfayı baz alabilirsiniz:</p>
+    <a class="btn btn-dark" asp-controller="Template" asp-action="Index">Template Dashboard Aç</a>
+</section>

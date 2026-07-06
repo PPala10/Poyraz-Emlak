@@ -3,43 +3,55 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - AirBnb</title>
+    <title>@ViewData["Title"] - AirBnb Clone Template</title>
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/AirBnb.styles.css" asp-append-version="true" />
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+<body class="app-body">
+    <header class="app-header border-bottom">
+        <nav class="navbar navbar-expand-lg bg-white">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">AirBnb</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <a class="navbar-brand fw-bold" asp-area="" asp-controller="Home" asp-action="Index">AirBnb Clone</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topMenu" aria-controls="topMenu" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+                <div class="collapse navbar-collapse" id="topMenu">
+                    <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+                        <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index">Overview</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-controller="Template" asp-action="Index">Sample Page</a></li>
+                        <li class="nav-item"><a class="btn btn-sm btn-dark" href="#">Host Setup</a></li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+
+    <div class="app-shell container-fluid">
+        <aside class="app-sidebar">
+            <p class="text-uppercase small fw-semibold text-secondary mb-3">Modules</p>
+            <nav class="nav flex-column gap-1">
+                <a class="nav-link" asp-controller="Home" asp-action="Index">Project Overview</a>
+                <a class="nav-link" asp-controller="Template" asp-action="Index">Template Dashboard</a>
+                <a class="nav-link" href="#">Users</a>
+                <a class="nav-link" href="#">Listings</a>
+                <a class="nav-link" href="#">Availability</a>
+                <a class="nav-link" href="#">Reservations</a>
+                <a class="nav-link" href="#">Payments</a>
+                <a class="nav-link" href="#">Reviews</a>
+                <a class="nav-link" href="#">Listing Images</a>
+            </nav>
+        </aside>
+
+        <main role="main" class="app-content">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - AirBnb - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="app-footer border-top text-muted">
+        <div class="container-fluid">
+            &copy; 2026 - AirBnb Clone Template
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

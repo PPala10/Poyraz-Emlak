@@ -1,0 +1,86 @@
+@model AirBnb.Models.Template.TemplateDashboardViewModel
+@{
+    ViewData["Title"] = "Template Dashboard";
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+    <div>
+        <h1 class="h3 mb-1">Template Dashboard</h1>
+        <p class="text-muted mb-0">Bu ekran sadece örnek amaçlıdır. Gerçek veriler daha sonra servis/DB katmanından gelecektir.</p>
+    </div>
+    <a class="btn btn-dark" href="#">Yeni İlan Ekle (Placeholder)</a>
+</div>
+
+<div class="row g-3 mb-3">
+    @foreach (var item in Model.Kpis)
+    {
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="surface-card h-100">
+                <p class="text-muted small mb-1">@item.Label</p>
+                <p class="h4 mb-0">@item.Value</p>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="row g-3">
+    <div class="col-12 col-xl-6">
+        <div class="surface-card h-100">
+            <h2 class="h5 mb-3">Son İlanlar</h2>
+            <div class="table-responsive">
+                <table class="table table-sm align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>Başlık</th>
+                            <th>Şehir</th>
+                            <th>Gecelik</th>
+                            <th>Durum</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var listing in Model.RecentListings)
+                        {
+                            <tr>
+                                <td>@listing.Title</td>
+                                <td>@listing.City</td>
+                                <td>@listing.PricePerNight</td>
+                                <td>@listing.Status</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-xl-6">
+        <div class="surface-card h-100">
+            <h2 class="h5 mb-3">Son Rezervasyonlar</h2>
+            <div class="table-responsive">
+                <table class="table table-sm align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>Misafir</th>
+                            <th>İlan</th>
+                            <th>Tarih</th>
+                            <th>Tutar</th>
+                            <th>Durum</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var reservation in Model.RecentReservations)
+                        {
+                            <tr>
+                                <td>@reservation.GuestName</td>
+                                <td>@reservation.ListingTitle</td>
+                                <td>@reservation.DateRange</td>
+                                <td>@reservation.TotalPrice</td>
+                                <td>@reservation.Status</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
