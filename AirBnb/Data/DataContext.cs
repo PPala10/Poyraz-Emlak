@@ -22,56 +22,57 @@ namespace AirbnbClone.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Listing>()
-                .HasOne(l => l.hostId)
-                .WithMany(u => u.HostedListings)
+                .HasOne(l => l.host)
+                .WithMany(u => u.hosted_listings)
                 .HasForeignKey(l => l.hostId)
-                .OnDelete(DeleteBehavior.Cascade); 
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<ListingImage>()
-                .HasOne(li => li.Listing)
-                .WithMany(l => l.ListingImages)
+                .HasOne(li => li.listing)
+                .WithMany(l => l.listing_images)
                 .HasForeignKey(li => li.listId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            // 3. availability -> listings (listing_id)
             modelBuilder.Entity<Availability>()
-                .HasOne(a => a.Listing)
-                .WithMany(l => l.Availabilities)
+                .HasOne(a => a.listing)
+                .WithMany(l => l.availabilities)
                 .HasForeignKey(a => a.listId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<Reservation>()
-                .HasOne(r => r.Listing)
-                .WithMany(l => l.Reservations)
+            modelBuilder.Entity<Listing>()
+                .HasMany(l => l.reservations)
+                .WithOne(r => r.listing)
                 .HasForeignKey(r => r.listId)
-                .OnDelete(DeleteBehavior.Restrict); 
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Reservation>()
-                .HasOne(r => r.Guest)
-                .WithMany(u => u.GuestReservations)
+                .HasOne(r => r.guest)
+                .WithMany(u => u.guest_reservations)
                 .HasForeignKey(r => r.guestId)
-                .OnDelete(DeleteBehavior.Restrict); 
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Payment>()
-                .HasOne(p => p.Reservation)
-                .WithOne(r => r.Payment)
+                .HasOne(p => p.reservation)
+                .WithOne(r => r.payment)
                 .HasForeignKey<Payment>(p => p.reservationId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Review>()
-                .HasOne(rw => rw.Reservation)
-                .WithMany(r => r.Reviews)
+                .HasOne(rw => rw.reservation)
+                .WithMany(r => r.reviews)
                 .HasForeignKey(rw => rw.reservationId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Review>()
-                .HasOne(rw => rw.Reviewer)
-                .WithMany(u => u.WrittenReviews)
+                .HasOne(rw => rw.reviewer)
+                .WithMany(u => u.written_reviews)
                 .HasForeignKey(rw => rw.reviewerId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Review>()
-                .HasOne(rw => rw.Listing)
-                .WithMany(l => l.Reviews)
+                .HasOne(rw => rw.listing)
+                .WithMany(l => l.reviews)
                 .HasForeignKey(rw => rw.listingId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
