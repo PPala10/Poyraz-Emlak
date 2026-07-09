@@ -3,6 +3,10 @@ using AirbnbClone.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddControllersWithViews();
+
+builder.Services.AddAuthorization();
+
 // Add services to the container.
 builder.Services.AddDbContext<DataContext>(options =>
 {

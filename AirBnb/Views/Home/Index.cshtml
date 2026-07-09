@@ -1,29 +1,70 @@
 ﻿@{
-    ViewData["Title"] = "Project Overview";
+    ViewData["Title"] = "Genel Bakış";
 }
 
 <section class="surface-card mb-3">
-    <h1 class="h3">AirBnb Clone - Eğitim Proje Şablonu</h1>
+    <h1 class="h3">Poyraz Gayrimenkul - @(DateTime.UtcNow.AddHours(3).Hour < 18 ? "İyi Günler" : "İyi Akşamlar") Dileriz</h1>
     <p class="text-muted mb-0">
-        Bu başlangıç yapısı; layout, modül menüsü ve örnek MVC akışını içerir. Veritabanı, migration,
-        CRUD ve ekranların detay implementasyonu stajyer geliştirici tarafından tamamlanacaktır.
+        Hızlı, güvenilir ve ucuz emlağın doğru adresi. Eviniz evimiz, sizler her şeyimizsiniz.
     </p>
 </section>
 
 <section class="surface-card mb-3">
-    <h2 class="h5 mb-3">ER Diyagramına Göre Çalışılacak Modüller</h2>
+    <h2 class="h5 mb-3">Görüntülemek İstediğiniz Alana Tıklayın:</h2>
     <div class="row g-3">
-        <div class="col-md-6 col-xl-4"><div class="border rounded p-3 h-100">Users</div></div>
-        <div class="col-md-6 col-xl-4"><div class="border rounded p-3 h-100">Listings</div></div>
-        <div class="col-md-6 col-xl-4"><div class="border rounded p-3 h-100">ListingImages</div></div>
-        <div class="col-md-6 col-xl-4"><div class="border rounded p-3 h-100">Availability</div></div>
-        <div class="col-md-6 col-xl-4"><div class="border rounded p-3 h-100">Reservations</div></div>
-        <div class="col-md-6 col-xl-4"><div class="border rounded p-3 h-100">Payments / Reviews</div></div>
+    <div class="col-md-10 col-xl-4">
+        <div class="border rounded p-3 h-100 d-flex flex-column justify-content-between">
+            <span>Kullanıcılar</span>
+            <a class="btn btn-sm btn-outline-dark mt-2" asp-controller="User" asp-action="Index">Kullanıcıları Görüntüle</a>
+        </div>
+    </div>        
+    <div class="col-md-10 col-xl-4">
+        <div class="border rounded p-3 h-100 d-flex flex-column justify-content-between">
+            <span>Meskenler</span>
+            <a class="btn btn-sm btn-outline-dark mt-2" asp-controller="Listing" asp-action="Index">Meskenleri Görüntüle</a>
+        </div>
     </div>
-</section>
-
-<section class="surface-card">
-    <h2 class="h5 mb-3">Örnek Sayfa</h2>
-    <p class="mb-3">Controller + ViewModel + View örneği için aşağıdaki sayfayı baz alabilirsiniz:</p>
-    <a class="btn btn-dark" asp-controller="Template" asp-action="Index">Template Dashboard Aç</a>
+    <div class="col-md-10 col-xl-4">
+        <div class="border rounded p-3 h-100 d-flex flex-column justify-content-between">
+            <span>Görseller</span>
+            <a class="btn btn-sm btn-outline-dark mt-2" asp-controller="ListingImage" asp-action="Index">Görselleri Görüntüle</a>
+        </div>
+    </div>        
+    <div class="col-md-10 col-xl-4">
+        <div class="border rounded p-3 h-100 d-flex flex-column justify-content-between">
+            <span>Müsaitlik</span>
+            <a class="btn btn-sm btn-outline-dark mt-2" asp-controller="Availability" asp-action="Index">Müsaitlik Durumunu Görüntüle</a>
+        </div>
+    </div>
+    <div class="col-md-10 col-xl-4">
+        <div class="border rounded p-3 h-100 d-flex flex-column justify-content-between">
+            <span>Rezervasyonlar</span>
+            <a class="btn btn-sm btn-outline-dark mt-2" asp-controller="Reservation" asp-action="Index">Rezervasyonları Görüntüle</a>
+        </div>
+    </div>        
+    <div class="col-md-10 col-xl-4">
+        <div class="border rounded p-3 h-100 d-flex flex-column justify-content-between">
+            <span>Ödemeler</span>
+            <a class="btn btn-sm btn-outline-dark mt-2" asp-controller="Payment" asp-action="Payment">Ödeme İşlemlerini Görüntüle</a>
+        </div>
+    </div>
+    <div class="col-md-10 col-xl-4">
+        <div class="border rounded p-3 h-100 d-flex flex-column justify-content-between">
+            <span>Yorumlar</span>
+            <a class="btn btn-sm btn-outline-dark mt-2" asp-controller="Review" asp-action="Index">Yorumları Görüntüle</a>
+        </div>
+    </div>
+    <div class="col-md-10 col-xl-4">
+        <div class="border rounded p-3 h-100 d-flex flex-column justify-content-between">
+            <span>İletişim</span>
+            <a class="btn btn-sm btn-outline-dark mt-2" asp-controller="Contact" asp-action="Index">Bizimle İletişime Geçin</a>
+        </div>
+    </div>
+    <div class="col-md-10 col-xl-4">
+        <div class="border rounded p-3 h-100 d-flex flex-column justify-content-between">
+            <span>Gizlilik</span>
+            <a class="btn btn-sm btn-outline-dark mt-2" asp-controller="Home" asp-action="Privacy">Gizlilik Sözleşmemizi Okuyun</a>
+        </div>
+    </div>
+    </div>
 </section>

@@ -15,4 +15,12 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\Availability\" />
+    <Folder Include="Views\ListingImage\" />
+    <Folder Include="Views\Payment\" />
+    <Folder Include="Views\Reservation\" />
+    <Folder Include="Views\Review\" />
+  </ItemGroup>
+
 </Project>
