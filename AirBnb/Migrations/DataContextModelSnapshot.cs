@@ -58,10 +58,6 @@ namespace AirBnb.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("amenities")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<int>("bathroom_count")
                         .HasColumnType("integer");
 
@@ -86,16 +82,10 @@ namespace AirBnb.Migrations
                     b.Property<bool>("is_active")
                         .HasColumnType("boolean");
 
-                    b.Property<decimal>("latitude")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("longitude")
-                        .HasColumnType("numeric");
-
                     b.Property<int>("max_guests")
                         .HasColumnType("integer");
 
-                    b.Property<decimal>("price_per_knight")
+                    b.Property<decimal>("price_per_night")
                         .HasColumnType("numeric");
 
                     b.Property<string>("property_type")

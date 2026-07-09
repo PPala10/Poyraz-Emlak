@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AirBnb.Controllers;
 
-public class ListingImage : Controller
+public class ListingImageController : Controller
 {
     public IActionResult Index()
     {

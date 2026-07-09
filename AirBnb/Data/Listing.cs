@@ -14,14 +14,11 @@ public class Listing
     public string address { get; set; }
     public string city { get; set; }
     public string country { get; set; }
-    public decimal latitude { get; set; }
-    public decimal longitude { get; set; }
     public string property_type { get; set; }
     public int room_count { get; set; }
     public int bathroom_count { get; set; }
     public int max_guests { get; set; }
-    public decimal price_per_knight { get; set; }
-    public string amenities { get; set; }
+    public decimal price_per_night { get; set; }    
     public bool is_active { get; set; }
     public DateTime created_at { get; set; }
     public DateTime updated_at { get; set; }

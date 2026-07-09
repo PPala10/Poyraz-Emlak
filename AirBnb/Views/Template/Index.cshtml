@@ -6,9 +6,11 @@
 <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
     <div>
         <h1 class="h3 mb-1">Gösterge Paneli</h1>
-        <p class="text-muted mb-0">Bu ekran sadece örnek amaçlıdır. Gerçek veriler daha sonra servis/DB katmanından gelecektir.</p>
+        <p class="text-muted mb-0">Aktif tüm gelişmeleri bu sayfadan görüntüleyebilirsiniz.</p>
     </div>
-    <a class="btn btn-dark" href="#">Yeni İlan Ekle (Placeholder)</a>
+    <a asp-controller="Listing" asp-action="Create" class="btn btn-primary rounded-pill px-4 shadow-sm">
+        <i class="bi bi-plus-circle-fill me-2"></i>Yeni İlan Ekle
+    </a>
 </div>
 
 <div class="row g-3 mb-3">

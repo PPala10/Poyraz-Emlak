@@ -1,8 +1,16 @@
+@model IEnumerable<AirBnb.Data.Listing>
 @{
     ViewData["Title"] = "Meskenler";
 }
 
 <div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 fw-bold text-dark mb-0">Gezilecek Harika Yerler</h1>
+        <a asp-controller="Listing" asp-action="Create" class="btn btn-primary rounded-pill px-4 shadow-sm">
+            <i class="bi bi-plus-circle-fill me-2"></i>Yeni İlan Ekle
+        </a>
+    </div>
+    
     <div class="d-flex justify-content-start gap-4 mb-4 pb-2 border-bottom overflow-auto text-nowrap text-secondary">
         <div class="text-center p-2 border-bottom border-dark text-dark" style="cursor:pointer;">
             <i class="bi bi-house-door fs-3 d-block"></i>
@@ -27,15 +35,15 @@
     </div>
 
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-        
+
         <div class="col">
             <div class="card h-100 border-0 shadow-sm surface-card rounded-4 position-relative overflow-hidden">
                 <button class="btn btn-sm position-absolute top-0 end-0 m-3 text-white fs-5 border-0 bg-transparent" style="z-index: 10;">
                     <i class="bi bi-heart"></i>
                 </button>
-                
+
                 <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=500&auto=format&fit=crop" class="card-img-top object-fit-cover rounded-4" alt="İlan Resmi" style="height: 220px;">
-                
+
                 <div class="card-body px-2 pt-3 pb-2">
                     <div class="d-flex justify-content-between align-items-center mb-1">
                         <h6 class="card-title text-dark fw-bold mb-0 text-truncate">Ege Detaylı Taş Ev</h6>
@@ -45,7 +53,7 @@
                     <p class="card-text text-muted small mb-2">10-15 Temmuz</p>
                     <div class="d-flex justify-content-between align-items-center">
                         <span class="text-dark fw-bold">₺2.450 <span class="fw-normal text-muted small">/ gece</span></span>
-                        <a href="/Listings/Detail/1" class="btn btn-sm btn-outline-primary rounded-pill px-3">İncele</a>
+                        <a asp-controller="Listing" asp-action="Detail" asp-route-id="1" class="btn btn-sm btn-outline-primary rounded-pill px-3">İncele</a>
                     </div>
                 </div>
             </div>
@@ -66,7 +74,7 @@
                     <p class="card-text text-muted small mb-2">12-18 Ağustos</p>
                     <div class="d-flex justify-content-between align-items-center">
                         <span class="text-dark fw-bold">₺3.100 <span class="fw-normal text-muted small">/ gece</span></span>
-                        <a href="/Listings/Detail/2" class="btn btn-sm btn-outline-primary rounded-pill px-3">İncele</a>
+                        <a asp-controller="Listing" asp-action="Detail" asp-route-id="2" class="btn btn-sm btn-outline-primary rounded-pill px-3">İncele</a>
                     </div>
                 </div>
             </div>
@@ -87,7 +95,7 @@
                     <p class="card-text text-muted small mb-2">01-07 Eylül</p>
                     <div class="d-flex justify-content-between align-items-center">
                         <span class="text-dark fw-bold">₺5.750 <span class="fw-normal text-muted small">/ gece</span></span>
-                        <a href="/Listings/Detail/3" class="btn btn-sm btn-outline-primary rounded-pill px-3">İncele</a>
+                        <a asp-controller="Listing" asp-action="Detail" asp-route-id="3" class="btn btn-sm btn-outline-primary rounded-pill px-3">İncele</a>
                     </div>
                 </div>
             </div>
@@ -108,7 +116,7 @@
                     <p class="card-text text-muted small mb-2">20-25 Ekim</p>
                     <div class="d-flex justify-content-between align-items-center">
                         <span class="text-dark fw-bold">₺1.900 <span class="fw-normal text-muted small">/ gece</span></span>
-                        <a href="/Listings/Detail/4" class="btn btn-sm btn-outline-primary rounded-pill px-3">İncele</a>
+                        <a asp-controller="Listing" asp-action="Detail" asp-route-id="4" class="btn btn-sm btn-outline-primary rounded-pill px-3">İncele</a>
                     </div>
                 </div>
             </div>
