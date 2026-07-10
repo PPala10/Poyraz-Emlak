@@ -82,8 +82,9 @@ public class ListingController : Controller
         existingListing.price_per_night = updatedListing.price_per_night;
         existingListing.city = updatedListing.city;
         existingListing.country = updatedListing.country;
-        existingListing.hostId = updatedListing.hostId; 
+        existingListing.hostId = updatedListing.hostId;
         existingListing.property_type = updatedListing.property_type;
+        existingListing.is_active = updatedListing.is_active;
         existingListing.updated_at = DateTime.UtcNow;
 
         _context.SaveChanges();
