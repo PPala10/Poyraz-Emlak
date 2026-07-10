@@ -1,27 +1,26 @@
+@model AirBnb.Data.Listing
+
 @{
-    ViewData["Title"] = "Ege Detaylı Taş Ev - İlan Detayı";
+    ViewData["Title"] = Model.title + " - İlan Detayı";
 }
 
 <div class="container mt-4">
-    <div class="mb-3">
-        <a href="/Listings" class="btn btn-sm btn-link text-secondary p-0 text-decoration-none">
-            <i class="bi bi-arrow-left me-1"></i> Tüm İlanlara Geri Dön
-        </a>
-    </div>
-
     <div class="d-flex justify-content-between align-items-start mb-3">
         <div>
-            <h1 class="h3 fw-bold text-dark mb-1">Ege Detaylı Taş Ev</h1>
-            <p class="text-muted small mb-0"><i class="bi bi-geo-alt-fill text-danger me-1"></i>Ayvalık, Balıkesir, Türkiye</p>
+            <h1 class="h3 fw-bold text-dark mb-1">@Model.title</h1>
+            <p class="text-muted small mb-0">
+                <i class="bi bi-geo-alt-fill text-danger me-1"></i>@Model.city, @Model.country 
+                <span class="badge bg-secondary-subtle text-secondary ms-2">@Model.property_type</span>
+            </p>
         </div>
         <div class="d-flex gap-2">
             <button class="btn btn-sm btn-outline-dark rounded-pill px-3"><i class="bi bi-share me-1"></i> Paylaş</button>
-            <button class="btn btn-sm btn-outline-danger rounded-pill px-3"><i class="bi bi-heart me-1"></i> Favori</button>
+            <button class="btn btn-sm btn-outline-success rounded-pill px-3"><i class="bi bi-heart me-1"></i> Favori</button>
         </div>
     </div>
 
     <div class="mb-4 overflow-hidden rounded-4 shadow-sm" style="max-height: 450px;">
-        <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200&auto=format&fit=crop" class="w-100 h-100 object-fit-cover" alt="Ev Detay Resmi">
+        <img src="@AirBnb.Controllers.ListingController.GetImageByPropertyType(Model.property_type)" class="w-100 h-100 object-fit-cover" alt="Ev Detay Resmi">
     </div>
 
     <div class="row g-4">
@@ -29,10 +28,13 @@
             <div class="card border-0 shadow-sm surface-card rounded-4 p-4 mb-4">
                 <div class="d-flex justify-content-between align-items-center pb-3 border-bottom mb-3">
                     <div>
-                        <h4 class="h5 fw-bold text-dark mb-1">Ev Sahibi: Poyraz Pala</h4>
+                        <h4 class="h5 fw-bold text-dark mb-1">
+                            Ev Sahibi: @(Model.host != null ? $"{Model.host.fname} {Model.host.lname}" : "Sistem Yöneticisi")
+                        </h4>
                         <p class="text-muted small mb-0">4 misafir · 2 yatak odası · 2 yatak · 1 banyo</p>
                     </div>
-                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop" class="rounded-circle object-fit-cover" width="50" height="50" alt="Ev Sahibi">
+                    <img src="@(Model.host != null && !string.IsNullOrEmpty(Model.host.avatar_url) ? Model.host.avatar_url : "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150")" 
+                         class="rounded-circle object-fit-cover" width="55" height="55" alt="Ev Sahibi Profil">
                 </div>
 
                 <div class="mb-4">
@@ -53,7 +55,7 @@
                     <div class="d-flex align-items-start gap-3">
                         <i class="bi bi-calendar-check fs-4 text-dark"></i>
                         <div>
-                            <h6 class="fw-bold text-dark mb-0">13 Temmuz tarihine kadar ücretsiz iptal</h6>
+                            <h6 class="fw-bold text-dark mb-0">Check-in tarihinden 3 gün öncesine kadar ücretsiz iptal</h6>
                             <small class="text-muted">Planlarınız değişirse tam iade alabilirsiniz.</small>
                         </div>
                     </div>
@@ -62,10 +64,8 @@
                 <hr class="text-muted opacity-25">
 
                 <h5 class="fw-bold text-dark mb-3">Bu mekan hakkında</h5>
-                <p class="text-secondary line-height-lg">
-                    Cunda Adası'na komşu, zeytin ağaçlarının arasında yer alan tarihi Ege taş evimiz, modern konforla gelenekselliği harmanlıyor. 
-                    Geniş taş avlusu, akşam serinliğinde şarabınızı yudumlamak veya sabah kuş sesleriyle uyanmak için mükemmel bir ortam sunmaktadır. 
-                    Merkeze yürüme mesafesinde olup, gürültüden uzak, huzurlu bir staj tatili geçirmek isteyenler için biçilmiş kaftandır.
+                <p class="text-secondary line-height-lg" style="white-space: pre-line;">
+                    @Model.description
                 </p>
 
                 <hr class="text-muted opacity-25">
@@ -90,7 +90,7 @@
                                 <strong class="text-dark">Ahmet Y.</strong>
                                 <span class="text-warning small"><i class="bi bi-star-fill"></i> 5</span>
                             </div>
-                            <p class="text-muted small mb-0">"Hayatımda kaldığım en huzurlu taş evdi. Poyraz Bey harika bir ev sahibi, her şeyle ilgilendi."</p>
+                            <p class="text-muted small mb-0">"Hayatımda kaldığım en huzurlu yerdi. Ev sahibi çok ilgili, her şeyle nizamîce ilgilendi."</p>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -109,56 +109,109 @@
         <div class="col-lg-4">
             <div class="card border-0 shadow-lg surface-card rounded-4 p-4 sticky-top" style="top: 24px; z-index: 5;">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <span class="fs-4 text-dark fw-bold">2.450 ₺ <span class="fw-normal text-muted small">/ gece</span></span>
+                    <span class="fs-4 text-dark fw-bold">₺@Model.price_per_night.ToString("N0") <span class="fw-normal text-muted small">/ gece</span></span>
                     <span class="small text-dark fw-bold"><i class="bi bi-star-fill text-warning me-1"></i>4.9</span>
                 </div>
 
-                <form onsubmit="event.preventDefault(); alert('Rezervasyon talebiniz başarıyla alındı! (Simüle Edildi)');">
+                <form action="/Reservation/Book" method="post">
+                    <input type="hidden" name="listingId" value="@Model.listId" />
+
                     <div class="border rounded-3 mb-3 overflow-hidden">
                         <div class="row g-0 border-bottom">
                             <div class="col-6 border-end p-2">
                                 <label class="d-block text-uppercase text-muted fw-bold" style="font-size: 10px;">Giriş Tarihi</label>
-                                <input type="date" class="form-control form-control-sm border-0 p-0 text-dark bg-transparent" value="2026-07-10">
+                                <input type="date" id="checkin-date" name="checkin_date" class="form-control form-control-sm border-0 p-0 text-dark bg-transparent" value="2026-07-10" required>
                             </div>
                             <div class="col-6 p-2">
                                 <label class="d-block text-uppercase text-muted fw-bold" style="font-size: 10px;">Çıkış Tarihi</label>
-                                <input type="date" class="form-control form-control-sm border-0 p-0 text-dark bg-transparent" value="2026-07-15">
+                                <input type="date" id="checkout-date" name="checkout_date" class="form-control form-control-sm border-0 p-0 text-dark bg-transparent" value="2026-07-15" required>
                             </div>
                         </div>
                         <div class="p-2">
-                            <label class="d-block text-uppercase text-muted fw-bold" style="font-size: 10px;">Misafir Sayısı</label>
-                            <select class="form-select form-select-sm border-0 p-0 text-dark bg-transparent">
-                                <option value="1">1 Misafir</option>
-                                <option value="2" selected>2 Misafir</option>
-                                <option value="3">3 Misafir</option>
-                                <option value="4">4 Misafir</option>
+                            <label class="d-block text-uppercase text-muted fw-bold" style="font-size: 10px;">Rezervasyon Yapacak Misafir</label>
+                            <select name="guestId" class="form-select form-select-sm border-0 p-0 text-dark bg-transparent" required>
+                                <option value="">-- Misafir Seçin --</option>
+                                @if (ViewBag.guests != null)
+                                {
+                                    foreach (var guest in (List<AirBnb.Data.User>)ViewBag.guests)
+                                    {
+                                        <option value="@guest.userId">@guest.fname @guest.lname</option>
+                                    }
+                                }
                             </select>
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary btn-lg w-100 rounded-pill fs-6 shadow-sm fw-bold mb-3">
+                    <button type="submit" id="btn-reserve" class="btn btn-primary btn-lg w-100 rounded-pill fs-6 shadow-sm fw-bold mb-3">
                         Rezervasyon Yap
                     </button>
                     
                     <p class="text-center text-muted small mb-3">Henüz sizden tahsilat yapılmayacak</p>
 
                     <div class="small text-secondary mb-2 d-flex justify-content-between">
-                        <span class="text-decoration-underline">2.450 ₺ x 5 gece</span>
-                        <span class="text-dark">12.250 ₺</span>
+                        <span id="calc-breakdown" class="text-decoration-underline">₺@Model.price_per_night.ToString("N0") x 5 gece</span>
+                        <span id="base-total-display" class="text-dark">₺0</span>
                     </div>
                     <div class="small text-secondary mb-3 d-flex justify-content-between">
                         <span class="text-decoration-underline">Poyraz Hizmet Bedeli</span>
-                        <span class="text-dark">450 ₺</span>
+                        <span class="text-dark">₺450</span>
                     </div>
                     
                     <hr class="text-muted opacity-25">
                     
                     <div class="fw-bold text-dark d-flex justify-content-between fs-5">
                         <span>Toplam</span>
-                        <span>12.700 ₺</span>
+                        <span id="grand-total-display" class="text-primary">₺0</span>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const pricePerNight = @Model.price_per_night;
+    const serviceFee = 450;
+    
+    const checkinInput = document.getElementById("checkin-date");
+    const checkoutInput = document.getElementById("checkout-date");
+    
+    const calcBreakdown = document.getElementById("calc-breakdown");
+    const baseTotalDisplay = document.getElementById("base-total-display");
+    const grandTotalDisplay = document.getElementById("grand-total-display");
+    const submitBtn = document.getElementById("btn-reserve");
+
+    function updatePrice() {
+        const date1 = new Date(checkinInput.value);
+        const date2 = new Date(checkoutInput.value);
+        
+        if (isNaN(date1) || isNaN(date2)) return;
+
+        const timeDiff = date2.getTime() - date1.getTime();
+        const days = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+        if (days <= 0) {
+            calcBreakdown.innerHTML = '<span class="text-danger fw-bold">Geçersiz Tarih Aralığı!</span>';
+            baseTotalDisplay.innerText = "₺0";
+            grandTotalDisplay.innerText = "₺0";
+            submitBtn.disabled = true;
+            return;
+        }
+
+        submitBtn.disabled = false;
+        
+        const baseTotal = days * pricePerNight;
+        const grandTotal = baseTotal + serviceFee;
+
+        calcBreakdown.innerText = `₺${pricePerNight.toLocaleString('tr-TR')} x ${days} gece`;
+        baseTotalDisplay.innerText = `₺${baseTotal.toLocaleString('tr-TR')}`;
+        grandTotalDisplay.innerText = `₺${grandTotal.toLocaleString('tr-TR')}`;
+    }
+
+    checkinInput.addEventListener("change", updatePrice);
+    checkoutInput.addEventListener("change", updatePrice);
+
+    updatePrice();
+});
+</script>

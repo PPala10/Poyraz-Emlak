@@ -1,34 +1,48 @@
-using AirBnb.Models.Template;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using AirBnb.Data;
+using AirBnb.Models;
+using AirbnbClone.Data;
+using System.Linq;
 
-namespace AirBnb.Controllers;
-
-public class TemplateController : Controller
+namespace AirBnb.Controllers
 {
-    public IActionResult Index()
+    public class TemplateController : Controller
     {
-        var model = new TemplateDashboardViewModel
-        {
-            Kpis =
-            [
-                new TemplateKpiItem { Label = "Aktif İlan", Value = "12" },
-                new TemplateKpiItem { Label = "Bekleyen Rezervasyon", Value = "4" },
-                new TemplateKpiItem { Label = "Aylık Gelir", Value = "₺124.500" },
-                new TemplateKpiItem { Label = "Yeni Yorum", Value = "9" }
-            ],
-            RecentListings =
-            [
-                new TemplateListingSummary { Title = "Kadıköy Loft", City = "İstanbul", PricePerNight = "₺3.250", Status = "Aktif" },
-                new TemplateListingSummary { Title = "Çeşme Yazlık", City = "İzmir", PricePerNight = "₺5.800", Status = "Taslak" },
-                new TemplateListingSummary { Title = "Uludağ Chalet", City = "Bursa", PricePerNight = "₺4.900", Status = "Aktif" }
-            ],
-            RecentReservations =
-            [
-                new TemplateReservationSummary { GuestName = "Ayşe Y.", ListingTitle = "Kadıköy Loft", DateRange = "12.08 - 15.08", TotalPrice = "₺9.750", Status = "Onaylandı" },
-                new TemplateReservationSummary { GuestName = "Mehmet K.", ListingTitle = "Uludağ Chalet", DateRange = "19.08 - 21.08", TotalPrice = "₺9.800", Status = "Beklemede" }
-            ]
-        };
+        private readonly DataContext _context;
 
-        return View(model);
+        public TemplateController(DataContext context)
+        {
+            _context = context;
+        }
+
+        public IActionResult Index()
+        {
+            var model = new DashBoardViewModel();
+
+            model.totalListing = _context.Listings.Count();
+            model.totalUser = _context.Users.Count();
+            model.activeListingNum = _context.Listings.Count(l => l.is_active);
+            
+            if (model.totalListing > 0)
+            {
+                model.averageListing = _context.Listings.Average(l => l.price_per_night);
+            }
+
+            model.latestListings = _context.Listings
+                .Include(l => l.host)
+                .OrderByDescending(l => l.created_at)
+                .Take(5)
+                .ToList();
+            
+            model.latestsReservations = _context.Reservations
+                .Include(r => r.guest)
+                .Include(r => r.listing)
+                .OrderByDescending(r => r.created_at)
+                .Take(5)
+                .ToList();
+
+            return View(model);
+        }
     }
 }

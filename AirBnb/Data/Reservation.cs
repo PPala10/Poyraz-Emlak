@@ -17,6 +17,7 @@ public class Reservation
     public int guest_count { get; set; }
     public decimal total_price { get; set; }
     public string status { get; set; }
+    public int total_nights { get; set; }
     public DateTime created_at { get; set; }
     public DateTime updated_at { get; set; }
     

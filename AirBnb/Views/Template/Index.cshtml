@@ -1,37 +1,52 @@
-@model AirBnb.Models.Template.TemplateDashboardViewModel
+@model AirBnb.Models.DashBoardViewModel
 @{
     ViewData["Title"] = "Gösterge Paneli";
 }
 
-<div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
     <div>
-        <h1 class="h3 mb-1">Gösterge Paneli</h1>
-        <p class="text-muted mb-0">Aktif tüm gelişmeleri bu sayfadan görüntüleyebilirsiniz.</p>
+        <h1 class="h3 mb-1 fw-bold text-dark">Gösterge Paneli</h1>
+        <p class="text-muted mb-0">Aktif tüm gelişmeleri bu sayfadan canlı olarak görüntüleyebilirsiniz.</p>
     </div>
-    <a asp-controller="Listing" asp-action="Create" class="btn btn-primary rounded-pill px-4 shadow-sm">
+    <a href="/Listing/Create" class="btn btn-primary rounded-pill px-4 shadow-sm">
         <i class="bi bi-plus-circle-fill me-2"></i>Yeni İlan Ekle
     </a>
 </div>
 
-<div class="row g-3 mb-3">
-    @foreach (var item in Model.Kpis)
-    {
-        <div class="col-12 col-sm-6 col-xl-3">
-            <div class="surface-card h-100">
-                <p class="text-muted small mb-1">@item.Label</p>
-                <p class="h4 mb-0">@item.Value</p>
-            </div>
+<div class="row g-3 mb-4">
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="surface-card h-100 p-3 bg-white shadow-sm rounded-4 border-0">
+            <p class="text-muted small fw-bold mb-1"><i class="bi bi-house-door text-primary me-1"></i> Toplam İlan Sayısı</p>
+            <p class="h3 mb-0 fw-bold text-dark">@Model.totalListing</p>
         </div>
-    }
+    </div>
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="surface-card h-100 p-3 bg-white shadow-sm rounded-4 border-0">
+            <p class="text-muted small fw-bold mb-1"><i class="bi bi-people text-success me-1"></i> Kayıtlı Ev Sahibi</p>
+            <p class="h3 mb-0 fw-bold text-dark">@Model.totalUser</p>
+        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="surface-card h-100 p-3 bg-white shadow-sm rounded-4 border-0">
+            <p class="text-muted small fw-bold mb-1"><i class="bi bi-currency-try text-warning me-1"></i> Ortalama Gece Fiyatı</p>
+            <p class="h3 mb-0 fw-bold text-dark">₺@Model.averageListing.ToString("N0")</p>
+        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="surface-card h-100 p-3 bg-white shadow-sm rounded-4 border-0">
+            <p class="text-muted small fw-bold mb-1"><i class="bi bi-check-circle text-info me-1"></i> Aktif Canlı İlanlar</p>
+            <p class="h3 mb-0 fw-bold text-dark">@Model.activeListingNum</p>
+        </div>
+    </div>
 </div>
 
 <div class="row g-3">
     <div class="col-12 col-xl-6">
-        <div class="surface-card h-100">
-            <h2 class="h5 mb-3">Son İlanlar</h2>
+        <div class="surface-card h-100 p-4 bg-white shadow-sm rounded-4 border-0">
+            <h2 class="h5 mb-3 fw-bold text-dark"><i class="bi bi-clock-history text-secondary me-2"></i>Son Eklenen İlanlar</h2>
             <div class="table-responsive">
-                <table class="table table-sm align-middle mb-0">
-                    <thead>
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light text-secondary small fw-bold">
                         <tr>
                             <th>Başlık</th>
                             <th>Şehir</th>
@@ -39,15 +54,31 @@
                             <th>Durum</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @foreach (var listing in Model.RecentListings)
+                    <tbody class="text-dark">
+                        @if (!Model.latestListings.Any())
                         {
-                            <tr>
-                                <td>@listing.Title</td>
-                                <td>@listing.City</td>
-                                <td>@listing.PricePerNight</td>
-                                <td>@listing.Status</td>
-                            </tr>
+                            <tr><td colspan="4" class="text-center py-3 text-muted">Henüz ilan yok.</td></tr>
+                        }
+                        else
+                        {
+                            foreach (var listing in Model.latestListings)
+                            {
+                                <tr>
+                                    <td class="fw-bold text-truncate" style="max-width: 150px;">@listing.title</td>
+                                    <td>@listing.city</td>
+                                    <td class="fw-bold text-primary">₺@listing.price_per_night.ToString("N0")</td>
+                                    <td>
+                                        @if (listing.is_active)
+                                        {
+                                            <span class="badge bg-success-subtle text-success rounded-pill px-2 py-1">Canlıda</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary-subtle text-secondary rounded-pill px-2 py-1">Pasif</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
                         }
                     </tbody>
                 </table>
@@ -56,29 +87,48 @@
     </div>
 
     <div class="col-12 col-xl-6">
-        <div class="surface-card h-100">
-            <h2 class="h5 mb-3">Son Rezervasyonlar</h2>
+        <div class="surface-card h-100 p-4 bg-white shadow-sm rounded-4 border-0">
+            <h2 class="h5 mb-3 fw-bold text-dark"><i class="bi bi-calendar-check text-secondary me-2"></i>Son Rezervasyonlar</h2>
             <div class="table-responsive">
-                <table class="table table-sm align-middle mb-0">
-                    <thead>
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light text-secondary small fw-bold">
                         <tr>
                             <th>Misafir</th>
                             <th>İlan</th>
-                            <th>Tarih</th>
                             <th>Tutar</th>
                             <th>Durum</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @foreach (var reservation in Model.RecentReservations)
+                    <tbody class="text-dark">
+                        @if (!Model.latestsReservations.Any())
                         {
                             <tr>
-                                <td>@reservation.GuestName</td>
-                                <td>@reservation.ListingTitle</td>
-                                <td>@reservation.DateRange</td>
-                                <td>@reservation.TotalPrice</td>
-                                <td>@reservation.Status</td>
+                                <td colspan="4" class="text-center py-4 text-muted small">
+                                    <i class="bi bi-calendar-x d-block fs-4 mb-1"></i>
+                                    Henüz rezervasyon kaydı bulunmuyor.
+                                </td>
                             </tr>
+                        }
+                        else
+                        {
+                            foreach (var reservation in Model.latestsReservations)
+                            {
+                                <tr>
+                                    <td>@(reservation.guest != null ? $"{reservation.guest.fname} {reservation.guest.lname}" : "Bilinmiyor")</td>
+                                    <td class="text-truncate" style="max-width: 150px;">@reservation.listing?.title</td>
+                                    <td class="fw-bold text-primary">₺@reservation.total_price.ToString("N0")</td>
+                                    <td>
+                                        @if (reservation.status?.ToLower() == "confirmed")
+                                        {
+                                            <span class="badge bg-success-subtle text-success rounded-pill px-2 py-1">Onaylandı</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-warning-subtle text-warning rounded-pill px-2 py-1">Beklemede</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
                         }
                     </tbody>
                 </table>

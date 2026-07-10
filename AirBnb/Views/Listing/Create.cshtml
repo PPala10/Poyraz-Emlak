@@ -18,6 +18,20 @@
     <div class="card border-0 shadow-sm surface-card rounded-4 p-4">
         <form action="/Listing/Create" method="post">
             <div class="row g-3">
+                <div class="col-12 mb-3">
+                    <label class="form-label small fw-bold text-secondary">Ev Sahibi (Sadece Rolü 'Host' Olanlar Listelenir)</label>
+                    <select name="hostId" class="form-select rounded-3" required>
+                        <option value="">-- Bir Ev Sahibi Seçin --</option>
+        
+                        @if (ViewBag.users != null)
+                        {
+                            foreach (var user in (List<AirBnb.Data.User>)ViewBag.users)
+                            {
+                                <option value="@user.userId">@user.fname @user.lname (@user.email)</option>
+                            }
+                        }
+                    </select>
+                </div>
                 <div class="col-12">
                     <label class="form-label small fw-bold text-secondary">İlan Başlığı</label>
                     <input type="text" name="title" class="form-control rounded-3" placeholder="Örn: Deniz Manzaralı Taş Ev" required>
@@ -52,10 +66,10 @@
                         <option value="Oda">Özel Oda</option>
                     </select>
                 </div>
-
+                
                 <div class="col-md-6">
                     <label class="form-label small fw-bold text-secondary">Gecelik Fiyat (₺)</label>
-                    <input type="number" name="price_per_night" class="form-control rounded-3" step="0.01" required>                
+                    <input type="number" name="price_per_night" class="form-control rounded-3" step="0.01" required>
                 </div>
                 <div class="col-md-4">
                     <label class="form-label small fw-bold text-secondary">Oda Sayısı</label>
@@ -73,6 +87,16 @@
                 <div class="col-12">
                     <label class="form-label small fw-bold text-secondary">Sunulan İmkanlar (Virgülle ayırın)</label>
                     <input type="text" name="amenities" class="form-control rounded-3" placeholder="Wi-Fi, Havuz, Klima, Otopark">
+                </div>
+                
+                <div class="col-12 mb-3">
+                    <label class="form-label small fw-bold text-secondary">Ev Tipi</label>
+                    <select name="property_type" class="form-select rounded-3" required>
+                        <option value="Apartman Dairesi">Apartman Dairesi</option>
+                        <option value="Villa">Lüks Villa</option>
+                        <option value="Dağ Evi">Otandik Dağ Evi</option>
+                        <option value="Stüdyo">Modern Stüdyo Daire</option>
+                    </select>
                 </div>
             </div>
 

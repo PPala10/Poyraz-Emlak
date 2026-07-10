@@ -33,7 +33,6 @@ namespace AirbnbClone.Data
                 .HasForeignKey(li => li.listId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // 3. availability -> listings (listing_id)
             modelBuilder.Entity<Availability>()
                 .HasOne(a => a.listing)
                 .WithMany(l => l.availabilities)

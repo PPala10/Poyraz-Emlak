@@ -1,0 +1,115 @@
+@model AirBnb.Data.User
+
+@{
+    ViewData["Title"] = "Kullanıcı Düzenle (Admin Paneli)";
+}
+
+<div class="container mt-5" style="max-width: 550px;">
+    <div class="mb-3">
+        <a href="/User" class="btn btn-sm btn-link text-secondary p-0 text-decoration-none">
+            <i class="bi bi-arrow-left me-1"></i> Kullanıcı Listesine Dön
+        </a>
+    </div>
+
+    <div class="card border-0 shadow-sm surface-card rounded-4 p-4">
+        <div class="text-center mb-4">
+            <i class="bi bi-shield-lock-fill text-warning fs-1"></i>
+            <h2 class="fw-bold text-dark mt-2">Tam Yetkili Düzenleme</h2>
+            <p class="text-muted small">ID: @Model.userId - @Model.fname @Model.lname kullanıcısının tüm verilerini yönetiyorsunuz.</p>
+        </div>
+
+        <form action="/User/Edit" method="post">
+            <input type="hidden" name="userId" value="@Model.userId" />
+            
+            <input type="hidden" name="avatar_url" id="selected_avatar" value="@Model.avatar_url" />
+
+            <div class="row g-3">
+                <div class="col-md-6 mb-2">
+                    <label class="form-label small fw-bold text-secondary">Adı</label>
+                    <input type="text" name="fname" value="@Model.fname" class="form-control rounded-3" required>
+                </div>
+
+                <div class="col-md-6 mb-2">
+                    <label class="form-label small fw-bold text-secondary">Soyadı</label>
+                    <input type="text" name="lname" value="@Model.lname" class="form-control rounded-3" required>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label small fw-bold text-secondary">E-posta Adresi</label>
+                <input type="email" name="email" value="@Model.email" class="form-control rounded-3" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label small fw-bold text-secondary">Telefon Numarası</label>
+                <input type="tel" name="phone" value="@Model.phone" class="form-control rounded-3" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label small fw-bold text-secondary">Kullanıcı Rolü</label>
+                <select name="role" class="form-select rounded-3" required>
+                    <option value="host" selected="@(Model.role == "host")">Ev Sahibi (Host)</option>
+                    <option value="guest" selected="@(Model.role == "guest")">Misafir (Guest)</option>
+                    <option value="admin" selected="@(Model.role == "admin")">Yönetici (Admin)</option>
+                </select>
+            </div>
+
+            <div class="form-check form-switch mb-4 p-3 bg-light rounded-3 d-flex justify-content-between align-items-center hidden-checkbox-fix">
+                <div class="ms-2">
+                    <label class="form-check-label fw-bold text-dark small d-block" for="is_verified">Kullanıcı Hesabını Onayla</label>
+                    <span class="text-muted small" style="font-size: 11px;">Açık olursa sistemde 'Onaylı' rozeti alır ve ilan açabilir.</span>
+                </div>
+                <input class="form-check-input me-2" type="checkbox" name="is_verified" value="true" id="is_verified" @(Model.is_verified ? "checked" : "") style="width: 45px; height: 24px; cursor: pointer;">
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label small fw-bold text-secondary d-block mb-2">Profil Resmini Güncelle</label>
+                <div class="d-flex flex-wrap justify-content-center gap-2 p-3 bg-light rounded-4 border">
+                    @{
+                        string[] avatarlar = {
+                            "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150",
+                            "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150",
+                            "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150",
+                            "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100",
+                            "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150",
+                            "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150",
+                            "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150",
+                            "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150"
+                        };
+                    }
+
+                    @foreach (var url in avatarlar)
+                    {
+                        bool isCurrent = Model.avatar_url == url;
+                        <img src="@url" 
+                             class="avatar-option rounded-circle border border-3 @(isCurrent ? "border-primary" : "border-transparent") cursor-pointer" 
+                             style="width: 52px; height: 52px; object-fit: cover; transition: 0.2s;" 
+                             onclick="selectAvatar(this, '@url')">
+                    }
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-warning text-dark w-100 rounded-pill py-2.5 fw-bold shadow-sm">
+                <i class="bi bi-shield-check me-2"></i>Tüm Değişiklikleri Veritabanına İşle
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+function selectAvatar(element, url) {
+    document.querySelectorAll('.avatar-option').forEach(img => {
+        img.classList.remove('border-primary');
+        img.classList.add('border-transparent');
+    });
+    element.classList.remove('border-transparent');
+    element.classList.add('border-primary');
+    document.getElementById('selected_avatar').value = url;
+}
+</script>
+
+<style>
+.cursor-pointer { cursor: pointer; }
+.border-transparent { border-color: transparent !important; }
+.hidden-checkbox-fix input[type="checkbox"] { margin-left: 0 !important; }
+</style>

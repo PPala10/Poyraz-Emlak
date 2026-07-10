@@ -1,13 +1,14 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Poyraz Gayrimenkul - </title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>@ViewData["Title"] - Poyraz Gayrimenkul </title>
     <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/AirBnb.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/AirBnb.styles.css" asp-append-version="true"/>
 </head>
 <body class="app-body">
     <header class="app-header border-bottom">
@@ -20,7 +21,7 @@
                 <div class="collapse navbar-collapse" id="topMenu">
                     <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
                         <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index">Genel Bakış</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-controller="Template" asp-action="Index">Gösterge Paneli</a>
+                        <li class="nav-item"><a class="nav-link" asp-controller="Template" asp-action="Index">Gösterge Paneli</a></li>
                         <li class="nav-item"><a class="btn btn-sm btn-dark" href="#">Host Setup</a></li>
                     </ul>
                 </div>
@@ -30,21 +31,30 @@
 
     <div class="app-shell container-fluid">
         <aside class="app-sidebar">
-            <p class="text-uppercase small fw-semibold text-secondary mb-3">Modules</p>
+            <p class="text-uppercase small fw-semibold text-secondary mb-3">Sayfalar</p>
             <nav class="nav flex-column gap-1">
                 <a class="nav-link" asp-controller="Home" asp-action="Index">Genel Bakış</a>
                 <a class="nav-link" asp-controller="Template" asp-action="Index">Gösterge Paneli</a>
                 <a class="nav-link" asp-controller="User" asp-action="Index">Kullanıcılar</a>
-                <a class="nav-link" asp-controller="Listing" asp-action="Index">Meskenler</a>
+                <a class="nav-link" asp-controller="Listing" asp-action="Index">İlanlar</a>
                 <a class="nav-link" href="#">Listing Images</a>
                 <a class="nav-link" href="#">Availability</a>
-                <a class="nav-link" href="#">Reservations</a>
+                <a class="nav-link" asp-controller="Reservation" asp-action="Index">Rezervasyonlar</a>
                 <a class="nav-link" href="#">Payments</a>
                 <a class="nav-link" href="#">Reviews</a>
             </nav>
         </aside>
 
         <main role="main" class="app-content">
+            @if (!(ViewContext.RouteData.Values["Controller"]?.ToString() == "Home" && ViewContext.RouteData.Values["Action"]?.ToString() == "Index"))
+            {
+                <div class="mb-3 text-start">
+                    <a href="/" class="btn btn-sm btn-link text-secondary p-0 text-decoration-none d-inline-flex align-items-center fw-semibold transition-link" style="font-size: 13px;">
+                        <i class="bi bi-arrow-left-circle-fill me-2 text-primary fs-5"></i> Genel Bakışa Dön (Ana Sayfa)
+                    </a>
+                </div>
+            }
+
             @RenderBody()
         </main>
     </div>
