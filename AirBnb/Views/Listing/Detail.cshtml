@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = Model.title + " - İlan Detayı";
-    var propertyImages = AirBnb.Controllers.ListingController.GetImageGallery(Model.property_type);
+    var propertyImages = Model.ImageGallery;
     var mainImage = propertyImages.FirstOrDefault() ?? "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200";
     
     string todayDate = DateTime.Today.ToString("yyyy-MM-dd");
@@ -129,6 +129,8 @@
                 </div>
 
                 <form action="/Reservation/Book" method="post">
+                    <input type="hidden" name="listingId" value="@Model.listId" />
+
                     @if (TempData["ErrorMessage"] != null)
                     {
                         <div class="alert alert-danger rounded-3 p-2 small mb-3 fw-bold d-flex align-items-center gap-2 shadow-sm" role="alert">
@@ -136,7 +138,6 @@
                             <span>@TempData["ErrorMessage"]</span>
                         </div>
                     }
-                    <input type="hidden" name="listingId" value="@Model.listId"/>
 
                     <div class="border rounded-3 mb-3 overflow-hidden">
                         <div class="row g-0 border-bottom">
@@ -167,7 +168,7 @@
                     <button type="submit" id="btn-reserve" class="btn btn-primary btn-lg w-100 rounded-pill fs-6 shadow-sm fw-bold mb-3">
                         Rezervasyon Yap
                     </button>
-
+                    
                     <p class="text-center text-muted small mb-3">Henüz sizden tahsilat yapılmayacak</p>
 
                     <div class="small text-secondary mb-2 d-flex justify-content-between">
@@ -178,9 +179,9 @@
                         <span class="text-decoration-underline">Poyraz Hizmet Bedeli</span>
                         <span class="text-dark">₺450</span>
                     </div>
-
+                    
                     <hr class="text-muted opacity-25">
-
+                    
                     <div class="fw-bold text-dark d-flex justify-content-between fs-5">
                         <span>Toplam</span>
                         <span id="grand-total-display" class="text-primary">₺0</span>

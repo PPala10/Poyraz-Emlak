@@ -14,7 +14,7 @@
     <div class="card border-0 shadow-sm surface-card rounded-4 p-4">
         <div class="text-center mb-4">
             <i class="bi bi-shield-lock-fill text-warning fs-1"></i>
-            <h2 class="fw-bold text-dark mt-2">Tam Yetkili Düzenleme</h2>
+            <h2 class="fw-bold text-dark mt-2">Kullanıcı Düzenleme Paneli</h2>
             <p class="text-muted small">ID: @Model.userId - @Model.fname @Model.lname kullanıcısının tüm verilerini yönetiyorsunuz.</p>
         </div>
 
@@ -48,9 +48,9 @@
             <div class="mb-3">
                 <label class="form-label small fw-bold text-secondary">Kullanıcı Rolü</label>
                 <select name="role" class="form-select rounded-3" required>
-                    <option value="host" selected="@(Model.role == "host")">Ev Sahibi (Host)</option>
-                    <option value="guest" selected="@(Model.role == "guest")">Misafir (Guest)</option>
-                    <option value="admin" selected="@(Model.role == "admin")">Yönetici (Admin)</option>
+                    <option value="host" selected="@(Model.role == "host")">Ev Sahibi</option>
+                    <option value="guest" selected="@(Model.role == "guest")">Misafir</option>
+                    <option value="admin" selected="@(Model.role == "admin")">Yönetici</option>
                 </select>
             </div>
 

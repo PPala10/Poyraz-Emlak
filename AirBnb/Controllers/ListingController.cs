@@ -16,12 +16,11 @@ public class ListingController : Controller
     
     public IActionResult Index()
     {
-        var listing = _context.Listings
-            .Include(l => l.host) 
-            .Where(l => l.is_active)
+        var listings = _context.Listings
+            .Include(l => l.host)
+            .OrderByDescending(l => l.created_at)
             .ToList();
-        
-        return View(listing);
+        return View(listings);
     }
 
     [HttpGet]
@@ -66,7 +65,7 @@ public class ListingController : Controller
     public IActionResult Edit(int id)
     {
         var listing = _context.Listings.FirstOrDefault(l => l.listId == id);
-        ViewBag.users = _context.Users.Where(u => u.role != null && u.role.ToLower()
+        ViewBag.users = _context.Users.Where(u => u.role.ToLower()
             .Contains("host") && u.is_verified).ToList();
         return View(listing);
     }
@@ -74,7 +73,6 @@ public class ListingController : Controller
     [HttpPost]
     public IActionResult Edit(Listing updatedListing)
     {
-        
         var existingListing = _context.Listings.FirstOrDefault(l => l.listId == updatedListing.listId);
 
         existingListing.title = updatedListing.title;
@@ -82,71 +80,30 @@ public class ListingController : Controller
         existingListing.price_per_night = updatedListing.price_per_night;
         existingListing.city = updatedListing.city;
         existingListing.country = updatedListing.country;
-        existingListing.hostId = updatedListing.hostId;
         existingListing.property_type = updatedListing.property_type;
+        existingListing.hostId = updatedListing.hostId;
         existingListing.is_active = updatedListing.is_active;
         existingListing.updated_at = DateTime.UtcNow;
 
         _context.SaveChanges();
         return RedirectToAction("Index");
     }
-    
-public static string GetMainImage(string propertyType)
-{
-    var type = propertyType?.ToLower().Replace("ı", "i").Replace("ğ", "g").Replace("ü", "u").Replace("ş", "s").Replace("ö", "o").Replace("ç", "c").Trim();
 
-    if (type == "villa") 
-        return "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=500";
-    
-    if (type == "dag evi" || type == "dag_evi") 
-        return "https://images.unsplash.com/photo-1510798831971-661eb04b3739?w=500";
-    
-    if (type == "studyo") 
-        return "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=500";
-
-    return "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=500";
-}
-
-public static List<string> GetImageGallery(string propertyType)
-{
-    var type = propertyType?.ToLower().Replace("ı", "i").Replace("ğ", "g").Replace("ü", "u").Replace("ş", "s").Replace("ö", "o").Replace("ç", "c").Trim();
-
-    if (type == "villa")
+    public IActionResult Delete(int id)
     {
-        return new List<string>
+        var relatedReservations = _context.Reservations.Where(r => r.listId == id).ToList();
+        if (relatedReservations.Any())
         {
-            "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800",
-            "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=500",
-            "https://images.unsplash.com/photo-1613977257363-707ba9348227?w=500",
-            "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=500"
-        };
-    }
-    if (type == "dag evi" || type == "dag_evi")
-    {
-        return new List<string>
+            _context.Reservations.RemoveRange(relatedReservations);
+        }
+
+        var listing = _context.Listings.FirstOrDefault(l => l.listId == id);
+        if (listing != null)
         {
-            "https://images.unsplash.com/photo-1510798831971-661eb04b3739?w=800",
-            "https://images.unsplash.com/photo-1449034446853-66c86144b0ad?w=500",
-            "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=500",
-            "https://images.unsplash.com/photo-1542718610-a1d656d1884c?w=500"
-        };
+            _context.Listings.Remove(listing);
+            _context.SaveChanges();
+        }
+
+        return RedirectToAction("Index");
     }
-    if (type == "studyo")
-    {
-        return new List<string>
-        {
-            "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800",
-            "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=500",
-            "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=500",
-            "https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=500"
-        };
-    }
-    return new List<string>
-    {
-        "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800",
-        "https://images.unsplash.com/photo-1560185127-6a2806647f81?w=500",
-        "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=500",
-        "https://images.unsplash.com/photo-1502672014263-04e8544368fc?w=500"
-    };
-}
 }

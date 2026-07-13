@@ -26,7 +26,7 @@
         {
             <div class="col-12 text-center my-5">
                 <i class="bi bi-house-exclamation text-muted fs-1"></i>
-                <p class="text-muted mt-2">Henüz veritabanında ilan bulunmuyor reisim.</p>
+                <p class="text-muted mt-2">Henüz veritabanında ilan bulunmuyor.</p>
             </div>
         }
         else
@@ -36,14 +36,20 @@
                 <div class="col">
                     <div class="card h-100 border-0 shadow-sm surface-card rounded-4 position-relative overflow-hidden transition-card">
                         
+                        <form action="/Listing/Delete/@item.listId" method="post" onsubmit="return confirm('Bu ilanı silmek istediğinize emin misiniz? Bu işlem geri alınamaycaktır.');" class="position-absolute" style="top: 12px; left: 12px; z-index: 10;">
+                            <button type="submit" class="btn btn-danger rounded-circle p-0 d-inline-flex align-items-center justify-content-center shadow" style="width: 36px; height: 36px; border: 2px solid white;" title="İlanı Sil">
+                                <i class="bi bi-x-lg" style="font-size: 14px; -webkit-text-stroke: 1px;"></i>
+                            </button>
+                        </form>
+
                         <a href="/Listing/Edit/@item.listId" class="btn btn-warning text-dark rounded-circle p-0 d-inline-flex align-items-center justify-content-center shadow position-absolute" style="width: 36px; height: 36px; top: 12px; right: 12px; z-index: 10; border: 2px solid white;" title="İlanı Düzenle">
                             <i class="bi bi-pencil-fill" style="font-size: 14px;"></i>
                         </a>
 
-                        <img src="@AirBnb.Controllers.ListingController.GetMainImage(item.property_type)" 
+                        <img src="@item.MainImage" 
                              class="card-img-top object-fit-cover rounded-top-4" 
                              alt="Property Image" 
-                             style="height: 200px;">
+                             style="height: 200px; @(!item.is_active ? "filter: grayscale(1) opacity(0.5);" : "")">
                         
                         <div class="card-body px-3 pt-3 pb-3 d-flex flex-column justify-content-between">
                             <div>
@@ -61,7 +67,14 @@
                             
                             <div class="pt-2 border-top">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <span class="text-secondary small">Gecelik Fiyat</span>
+                                    @if (item.is_active)
+                                    {
+                                        <span class="badge bg-success-subtle text-success px-2 py-1 rounded-pill small fw-bold">Aktif</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger-subtle text-danger px-2 py-1 rounded-pill small fw-bold">Pasif</span>
+                                    }
                                     <span class="text-dark fw-bold h5 mb-0">₺@item.price_per_night.ToString("N0")</span>
                                 </div>
                                 

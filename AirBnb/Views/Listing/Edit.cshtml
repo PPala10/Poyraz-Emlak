@@ -1,86 +1,65 @@
 @model AirBnb.Data.Listing
 
 @{
-    ViewData["Title"] = "İlan Düzenle (Admin Paneli)";
+    ViewData["Title"] = "İlanı Düzenle";
 }
 
-<div class="container mt-5" style="max-width: 550px;">
-    <div class="mb-3">
-        <a href="/Listing" class="btn btn-sm btn-link text-secondary p-0 text-decoration-none">
-            <i class="bi bi-arrow-left me-1"></i> İlanlar Listesine Dön
-        </a>
-    </div>
-
-    <div class="card border-0 shadow-sm surface-card rounded-4 p-4">
-        <div class="text-center mb-4">
-            <i class="bi bi-house-gear-fill text-warning fs-1"></i>
-            <h2 class="fw-bold text-dark mt-2">İlan Bilgilerini Düzenle</h2>
-            <p class="text-muted small">ID: @Model.listId numaralı ilanın verilerini güncelliyorsunuz.</p>
-        </div>
-
+<div class="container mt-4" style="max-width: 600px;">
+    <div class="card border-0 shadow-sm surface-card rounded-4 p-4 bg-white">
+        <h2 class="h4 fw-bold text-dark mb-4">İlan Düzenleme Paneli</h2>
+        
         <form action="/Listing/Edit" method="post">
             <input type="hidden" name="listId" value="@Model.listId" />
+            <input type="hidden" name="hostId" value="@Model.hostId" />
+            <input type="hidden" name="created_at" value="@Model.created_at" />
 
             <div class="mb-3">
-                <label class="form-label small fw-bold text-secondary">İlan Başlığı</label>
-                <input type="text" name="title" value="@Model.title" class="form-control rounded-3" required>
+                <label class="form-label fw-bold small text-secondary">İlan Başlığı</label>
+                <input type="text" name="title" class="form-control rounded-3" value="@Model.title" required>
             </div>
 
             <div class="mb-3">
-                <label class="form-label small fw-bold text-secondary">Açıklama</label>
-                <textarea name="description" class="form-control rounded-3" rows="3" required>@Model.description</textarea>
+                <label class="form-label fw-bold small text-secondary">Açıklama</label>
+                <textarea name="description" class="form-control rounded-3" rows="4" required>@Model.description</textarea>
             </div>
 
             <div class="row g-3 mb-3">
                 <div class="col-6">
-                    <label class="form-label small fw-bold text-secondary">Şehir</label>
-                    <input type="text" name="city" value="@Model.city" class="form-control rounded-3" required>
+                    <label class="form-label fw-bold small text-secondary">Şehir</label>
+                    <input type="text" name="city" class="form-control rounded-3" value="@Model.city" required>
                 </div>
                 <div class="col-6">
-                    <label class="form-label small fw-bold text-secondary">Ülke</label>
-                    <input type="text" name="country" value="@Model.country" class="form-control rounded-3" required>
+                    <label class="form-label fw-bold small text-secondary">Ülke</label>
+                    <input type="text" name="country" class="form-control rounded-3" value="@Model.country" required>
                 </div>
             </div>
 
-            <div class="mb-3">
-                <label class="form-label small fw-bold text-secondary">Gecelik Fiyat (₺)</label>
-                <input type="number" name="price_per_night" value="@Model.price_per_night" class="form-control rounded-3" required>
+            <div class="row g-3 mb-3">
+                <div class="col-6">
+                    <label class="form-label fw-bold small text-secondary">Gecelik Fiyat (₺)</label>
+                    <input type="number" name="price_per_night" class="form-control rounded-3" value="@Model.price_per_night" required>
+                </div>
+                <div class="col-6">
+                    <label class="form-label fw-bold small text-secondary">Mekan Türü</label>
+                    <input type="text" name="property_type" class="form-control rounded-3" value="@Model.property_type" required>
+                </div>
             </div>
 
-            <div class="mb-4">
-                <label class="form-label small fw-bold text-secondary">Ev Sahibi Değiştir</label>
-                <select name="hostId" class="form-select rounded-3" required>
-                    @if (ViewBag.users != null)
-                    {
-                        foreach (var user in (List<AirBnb.Data.User>)ViewBag.users)
-                        {
-                            <option value="@user.userId" selected="@(user.userId == Model.hostId)">@user.fname @user.lname (@user.email)</option>
-                        }
-                    }
-                </select>
-            </div>
-            
-            <div class="mb-3">
-                <label class="form-label small fw-bold text-secondary">Ev Tipi Değiştir</label>
-                <select name="property_type" class="form-select rounded-3" required>
-                    <option value="Apartman Dairesi" selected="@(Model.property_type == "Apartman Dairesi")">Apartman Dairesi</option>
-                    <option value="Villa" selected="@(Model.property_type == "Villa")">Lüks Villa</option>
-                    <option value="Dağ Evi" selected="@(Model.property_type == "Dağ Evi")">Otandik Dağ Evi</option>
-                    <option value="Stüdyo" selected="@(Model.property_type == "Stüdyo")">Modern Stüdyo Daire</option>
-                </select>
-            </div>
-            
             <div class="form-check form-switch mb-4 p-3 bg-light rounded-3 d-flex justify-content-between align-items-center">
                 <div class="ms-2">
                     <label class="form-check-label fw-bold text-dark small d-block" for="is_active">İlanı Yayına Al</label>
-                    <span class="text-muted small" style="font-size: 11px;">Kapatılırsa kullanıcı arayüzünde listelenmez.</span>
+                    <span class="text-muted small" style="font-size: 11px;">Kapatılırsa sistemde pasif konuma geçer.</span>
                 </div>
-                <input class="form-check-input me-2" type="checkbox" name="is_active" value="true" id="is_active" @(Model.is_active ? "checked" : "") style="width: 45px; height: 24px; cursor: pointer;">
+                <div>
+                    <input class="form-check-input" type="checkbox" name="is_active" value="true" id="is_active" @(Model.is_active ? "checked" : "") style="width: 45px; height: 24px; cursor: pointer;">
+                    <input type="hidden" name="is_active" value="false" />
+                </div>
             </div>
 
-            <button type="submit" class="btn btn-warning text-dark w-100 rounded-pill py-2.5 fw-bold shadow-sm">
-                <i class="bi bi-save2-fill me-2"></i>İlan Değişikliklerini Kaydet
-            </button>
+            <div class="d-flex gap-2">
+                <a href="/Listing" class="btn btn-outline-secondary rounded-pill w-50 py-2 fw-bold small">Vazgeç</a>
+                <button type="submit" class="btn btn-primary rounded-pill w-50 py-2 fw-bold small">Değişiklikleri Kaydet</button>
+            </div>
         </form>
     </div>
 </div>
