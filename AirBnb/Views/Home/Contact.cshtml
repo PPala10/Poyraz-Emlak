@@ -1,0 +1,97 @@
+@{
+    ViewData["Title"] = "İletişim";
+}
+
+<div class="container mt-4" style="max-width: 1100px;">
+    <div class="text-center mb-5">
+        <h1 class="fw-bold text-dark mb-2">Bizimle İletişime Geçin</h1>
+        <p class="text-muted">Poyraz Gayrimenkul güvencesiyle sorularınız ve talepleriniz için 7/24 hizmetinizdeyiz.</p>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-5">
+            <div class="card border-0 shadow-sm surface-card rounded-4 p-4 bg-white h-100">
+                <h3 class="h5 fw-bold text-dark mb-4">Kurumsal Bilgiler</h3>
+
+                <div class="d-flex align-items-start gap-3 mb-4">
+                    <div class="bg-primary-subtle text-primary rounded-circle p-2.5 d-inline-flex">
+                        <i class="bi bi-geo-alt-fill fs-5"></i>
+                    </div>
+                    <div>
+                        <h6 class="fw-bold text-dark mb-1">Merkez Ofis Adresi</h6>
+                        <p class="text-secondary small mb-0">Finanskent Mahallesi Finans Caddesi No:40/1 Ümraniye/İstanbul Türkiye</p>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-start gap-3 mb-4">
+                    <div class="bg-success-subtle text-success rounded-circle p-2.5 d-inline-flex">
+                        <i class="bi bi-telephone-fill fs-5"></i>
+                    </div>
+                    <div>
+                        <h6 class="fw-bold text-dark mb-1">Müşteri Hizmetleri</h6>
+                        <p class="text-secondary small mb-0">+90 536 999 00 11</p>
+                        <p class="text-muted Threadd-xs">Hafta içi: 09:00 - 18:00</p>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-start gap-3 mb-4">
+                    <div class="bg-warning-subtle text-warning rounded-circle p-2.5 d-inline-flex">
+                        <i class="bi bi-envelope-fill fs-5"></i>
+                    </div>
+                    <div>
+                        <h6 class="fw-bold text-dark mb-1">E-posta Departmanları</h6>
+                        <p class="text-secondary small mb-0">Destek: poyraz.pala@poyrazgayrimenkul.com</p>
+                        <p class="text-secondary small mb-0">Genel: info@poyrazgayrimenkul.com</p>
+                    </div>
+                </div>
+
+                <hr class="text-muted opacity-25 my-4">
+
+                <h6 class="fw-bold text-dark mb-2 small text-uppercase">Yasal Bilgilendirme</h6>
+                <p class="text-muted style-text mb-0" style="font-size: 11px; line-height: 1.6;">
+                    Bu sayfadan paylaştığınız tüm veriler, KVKK kural ve politikalarımıza uygun olarak şifrelenerek saklanmaktadır. Detaylı bilgi için KVKK Aydınlatma Metni ve Gizlilik Sözleşmesi sayfalarımızı inceleyebilirsiniz.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-sm surface-card rounded-4 p-4 bg-white">
+                <h3 class="h5 fw-bold text-dark mb-4">Bize Mesaj Gönderin</h3>
+
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success rounded-3 p-3 small mb-4 fw-bold d-flex align-items-center gap-2 shadow-sm" role="alert">
+                        <i class="bi bi-check-circle-fill fs-5"></i>
+                        <span>@TempData["SuccessMessage"]</span>
+                    </div>
+                }
+
+                <form action="/Home/SendMessage" method="post">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small text-secondary">Adınız Soyadınız</label>
+                        <input type="text" name="fullName" class="form-control rounded-3" placeholder="Örn: Ahmet Yılmaz" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small text-secondary">E-posta Adresiniz</label>
+                        <input type="email" name="email" class="form-control rounded-3" placeholder="ahmet@example.com" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small text-secondary">Konu</label>
+                        <input type="text" name="subject" class="form-control rounded-3" placeholder="Hangi konuda görüşmek istiyorsunuz?" required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold small text-secondary">Mesajınız</label>
+                        <textarea name="message" class="form-control rounded-3" rows="5" placeholder="Mesajınızı buraya detaylıca yazabilirsiniz..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary rounded-pill px-5 py-2.5 fw-bold small shadow-sm d-inline-flex align-items-center gap-2">
+                        <i class="bi bi-send-fill"></i> Mesajı İlet
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -21,7 +21,7 @@ namespace AirBnb.Controllers
             var model = new DashBoardViewModel();
 
             model.totalListing = _context.Listings.Count();
-            model.totalUser = _context.Users.Count();
+            model.totalUser = _context.Users.Count(u => !string.IsNullOrEmpty(u.role) && u.role.Trim().ToLower() == "host");
             model.activeListingNum = _context.Listings.Count(l => l.is_active);
             
             if (model.totalListing > 0)

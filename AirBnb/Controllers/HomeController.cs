@@ -16,6 +16,18 @@ namespace AirBnb.Controllers
             return View();
         }
 
+        public IActionResult Contact()
+        {
+            return View();
+        }
+        
+        [HttpPost]
+        public IActionResult SendMessage(string fullName, string email, string subject, string message)
+        {
+            TempData["SuccessMessage"] = "Mesajınız başarıyla sunucularımıza iletildi!";
+            return RedirectToAction("Contact");
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
