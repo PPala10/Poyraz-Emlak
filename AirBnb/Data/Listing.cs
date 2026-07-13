@@ -22,8 +22,6 @@ public class Listing
     public bool is_active { get; set; }
     public DateTime created_at { get; set; }
     public DateTime updated_at { get; set; }
-    
-    public ICollection<ListingImage> listing_images { get; set; } = new List<ListingImage>();
     public ICollection<Availability> availabilities { get; set; } = new List<Availability>();
     public ICollection<Reservation> reservations { get; set; } = new List<Reservation>();
     public ICollection<Review> reviews { get; set; } = new List<Review>();

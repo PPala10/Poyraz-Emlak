@@ -31,7 +31,7 @@ namespace AirBnb.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("aid"));
 
                     b.Property<DateTime>("date")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("is_blocked")
                         .HasColumnType("boolean");
@@ -70,7 +70,7 @@ namespace AirBnb.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("created_at")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("description")
                         .IsRequired()
@@ -100,44 +100,13 @@ namespace AirBnb.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("updated_at")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("listId");
 
                     b.HasIndex("hostId");
 
                     b.ToTable("Listings");
-                });
-
-            modelBuilder.Entity("AirBnb.Data.ListingImage", b =>
-                {
-                    b.Property<int>("imageId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("imageId"));
-
-                    b.Property<string>("image_url")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<bool>("is_cover")
-                        .HasColumnType("boolean");
-
-                    b.Property<int>("listId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("sort_order")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("updated_at")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("imageId");
-
-                    b.HasIndex("listId");
-
-                    b.ToTable("ListingImages");
                 });
 
             modelBuilder.Entity("AirBnb.Data.Payment", b =>
@@ -152,14 +121,14 @@ namespace AirBnb.Migrations
                         .HasColumnType("numeric");
 
                     b.Property<DateTime>("created_at")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("currency")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("paid_at")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("provider")
                         .IsRequired()
@@ -197,13 +166,13 @@ namespace AirBnb.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("reservationId"));
 
                     b.Property<DateTime>("check_in")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("check_out")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("created_at")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("guestId")
                         .HasColumnType("integer");
@@ -225,7 +194,7 @@ namespace AirBnb.Migrations
                         .HasColumnType("numeric");
 
                     b.Property<DateTime>("updated_at")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("reservationId");
 
@@ -249,7 +218,7 @@ namespace AirBnb.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("created_at")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("listingId")
                         .HasColumnType("integer");
@@ -287,7 +256,7 @@ namespace AirBnb.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("created_at")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("email")
                         .IsRequired()
@@ -317,7 +286,7 @@ namespace AirBnb.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("updated_at")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("userId");
 
@@ -344,17 +313,6 @@ namespace AirBnb.Migrations
                         .IsRequired();
 
                     b.Navigation("host");
-                });
-
-            modelBuilder.Entity("AirBnb.Data.ListingImage", b =>
-                {
-                    b.HasOne("AirBnb.Data.Listing", "listing")
-                        .WithMany("listing_images")
-                        .HasForeignKey("listId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("listing");
                 });
 
             modelBuilder.Entity("AirBnb.Data.Payment", b =>
@@ -417,8 +375,6 @@ namespace AirBnb.Migrations
             modelBuilder.Entity("AirBnb.Data.Listing", b =>
                 {
                     b.Navigation("availabilities");
-
-                    b.Navigation("listing_images");
 
                     b.Navigation("reservations");
 

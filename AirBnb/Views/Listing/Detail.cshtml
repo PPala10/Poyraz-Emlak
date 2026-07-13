@@ -2,6 +2,11 @@
 
 @{
     ViewData["Title"] = Model.title + " - İlan Detayı";
+    var propertyImages = AirBnb.Controllers.ListingController.GetImageGallery(Model.property_type);
+    var mainImage = propertyImages.FirstOrDefault() ?? "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200";
+    
+    string todayDate = DateTime.Today.ToString("yyyy-MM-dd");
+    string nextWeekDate = DateTime.Today.AddDays(7).ToString("yyyy-MM-dd");
 }
 
 <div class="container mt-4">
@@ -19,8 +24,18 @@
         </div>
     </div>
 
-    <div class="mb-4 overflow-hidden rounded-4 shadow-sm" style="max-height: 450px;">
-        <img src="@AirBnb.Controllers.ListingController.GetImageByPropertyType(Model.property_type)" class="w-100 h-100 object-fit-cover" alt="Ev Detay Resmi">
+    <div class="row g-2 mb-4 rounded-4 overflow-hidden shadow-sm" style="height: 420px;">
+        <div class="col-md-8 h-100">
+            <img src="@mainImage" class="w-100 h-100 object-fit-cover" alt="Main Image">
+        </div>
+        <div class="col-md-4 d-flex flex-column gap-2 h-100">
+            @foreach (var imageUrl in propertyImages.Skip(1).Take(3))
+            {
+                <div class="flex-grow-1 overflow-hidden" style="height: 134px;">
+                    <img src="@imageUrl" class="w-100 h-100 object-fit-cover" alt="Gallery Image">
+                </div>
+            }
+        </div>
     </div>
 
     <div class="row g-4">
@@ -114,17 +129,24 @@
                 </div>
 
                 <form action="/Reservation/Book" method="post">
-                    <input type="hidden" name="listingId" value="@Model.listId" />
+                    @if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger rounded-3 p-2 small mb-3 fw-bold d-flex align-items-center gap-2 shadow-sm" role="alert">
+                            <i class="bi bi-exclamation-triangle-fill fs-6"></i>
+                            <span>@TempData["ErrorMessage"]</span>
+                        </div>
+                    }
+                    <input type="hidden" name="listingId" value="@Model.listId"/>
 
                     <div class="border rounded-3 mb-3 overflow-hidden">
                         <div class="row g-0 border-bottom">
                             <div class="col-6 border-end p-2">
                                 <label class="d-block text-uppercase text-muted fw-bold" style="font-size: 10px;">Giriş Tarihi</label>
-                                <input type="date" id="checkin-date" name="checkin_date" class="form-control form-control-sm border-0 p-0 text-dark bg-transparent" value="2026-07-10" required>
+                                <input type="date" id="checkin-date" name="checkin_date" class="form-control form-control-sm border-0 p-0 text-dark bg-transparent" value="@todayDate" min="@todayDate" required>
                             </div>
                             <div class="col-6 p-2">
                                 <label class="d-block text-uppercase text-muted fw-bold" style="font-size: 10px;">Çıkış Tarihi</label>
-                                <input type="date" id="checkout-date" name="checkout_date" class="form-control form-control-sm border-0 p-0 text-dark bg-transparent" value="2026-07-15" required>
+                                <input type="date" id="checkout-date" name="checkout_date" class="form-control form-control-sm border-0 p-0 text-dark bg-transparent" value="@nextWeekDate" required>
                             </div>
                         </div>
                         <div class="p-2">
@@ -145,20 +167,20 @@
                     <button type="submit" id="btn-reserve" class="btn btn-primary btn-lg w-100 rounded-pill fs-6 shadow-sm fw-bold mb-3">
                         Rezervasyon Yap
                     </button>
-                    
+
                     <p class="text-center text-muted small mb-3">Henüz sizden tahsilat yapılmayacak</p>
 
                     <div class="small text-secondary mb-2 d-flex justify-content-between">
-                        <span id="calc-breakdown" class="text-decoration-underline">₺@Model.price_per_night.ToString("N0") x 5 gece</span>
+                        <span id="calc-breakdown" class="text-decoration-underline">₺@Model.price_per_night.ToString("N0") x 7 gece</span>
                         <span id="base-total-display" class="text-dark">₺0</span>
                     </div>
                     <div class="small text-secondary mb-3 d-flex justify-content-between">
                         <span class="text-decoration-underline">Poyraz Hizmet Bedeli</span>
                         <span class="text-dark">₺450</span>
                     </div>
-                    
+
                     <hr class="text-muted opacity-25">
-                    
+
                     <div class="fw-bold text-dark d-flex justify-content-between fs-5">
                         <span>Toplam</span>
                         <span id="grand-total-display" class="text-primary">₺0</span>

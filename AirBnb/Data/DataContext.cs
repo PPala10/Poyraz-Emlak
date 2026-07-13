@@ -11,7 +11,6 @@ namespace AirbnbClone.Data
 
         public DbSet<User> Users { get; set; }
         public DbSet<Listing> Listings { get; set; }
-        public DbSet<ListingImage> ListingImages { get; set; }
         public DbSet<Availability> Availabilities { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<Review> Reviews { get; set; }
@@ -25,12 +24,6 @@ namespace AirbnbClone.Data
                 .HasOne(l => l.host)
                 .WithMany(u => u.hosted_listings)
                 .HasForeignKey(l => l.hostId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<ListingImage>()
-                .HasOne(li => li.listing)
-                .WithMany(l => l.listing_images)
-                .HasForeignKey(li => li.listId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Availability>()

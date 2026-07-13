@@ -28,23 +28,37 @@ namespace AirBnb.Controllers
         [HttpPost]
         public IActionResult Book(int listingId, int guestId, DateTime checkin_date, DateTime checkout_date)
         {
-            DateTime utcCheckin = DateTime.SpecifyKind(checkin_date, DateTimeKind.Utc);
-            DateTime utcCheckout = DateTime.SpecifyKind(checkout_date, DateTimeKind.Utc);
-
             var currentListing = _context.Listings.FirstOrDefault(l => l.listId == listingId);
             if (currentListing == null)
             {
                 return RedirectToAction("Index", "Listing");
             }
 
-            TimeSpan duration = utcCheckout - utcCheckin;
+            TimeSpan duration = checkout_date.Date - checkin_date.Date;
             int nights = duration.Days;
 
             if (nights <= 0)
             {
+                TempData["ErrorMessage"] = "Geçersiz tarih aralığı seçtiniz.";
                 return RedirectToAction("Detail", "Listing", new { id = listingId });
             }
 
+            bool isOverlapping = _context.Reservations.Any(r => 
+                r.listId == listingId && 
+                r.status != "Cancelled" && 
+                r.status != "cancelled" &&
+                checkin_date.Date < r.check_out.Date && 
+                checkout_date.Date > r.check_in.Date
+            );
+
+            if (isOverlapping)
+            {
+                TempData["ErrorMessage"] = "Seçilen tarih aralığında bu ilan için doluluk mevcuttur.";
+                return RedirectToAction("Detail", "Listing", new { id = listingId });
+            }
+
+            DateTime utcCheckin = DateTime.SpecifyKind(checkin_date.Date, DateTimeKind.Utc);
+            DateTime utcCheckout = DateTime.SpecifyKind(checkout_date.Date, DateTimeKind.Utc);
             decimal serviceFee = 450;
             decimal finalPrice = (nights * currentListing.price_per_night) + serviceFee;
 
@@ -71,6 +85,18 @@ namespace AirBnb.Controllers
                 return RedirectToAction("Index", "Listing");
             }
 
+            return RedirectToAction("Index");
+        }
+        
+        [HttpPost]
+        public IActionResult Cancel(int id)
+        {
+            var reservation = _context.Reservations.FirstOrDefault(r => r.reservationId == id);
+            if (reservation != null)
+            {
+                _context.Reservations.Remove(reservation);
+                _context.SaveChanges();
+            }
             return RedirectToAction("Index");
         }
     }
