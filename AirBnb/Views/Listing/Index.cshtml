@@ -36,7 +36,7 @@
                 <div class="col">
                     <div class="card h-100 border-0 shadow-sm surface-card rounded-4 position-relative overflow-hidden transition-card">
                         
-                        <form action="/Listing/Delete/@item.listId" method="post" onsubmit="return confirm('Bu ilanı silmek istediğinize emin misiniz? Bu işlem geri alınamaycaktır.');" class="position-absolute" style="top: 12px; left: 12px; z-index: 10;">
+                        <form action="/Listing/Delete/@item.listId" method="post" onsubmit="return confirm('Bu ilanı yayından kaldırmak istediğinize emin misiniz?');" class="position-absolute" style="top: 12px; left: 12px; z-index: 10;">
                             <button type="submit" class="btn btn-danger rounded-circle p-0 d-inline-flex align-items-center justify-content-center shadow" style="width: 36px; height: 36px; border: 2px solid white;" title="İlanı Sil">
                                 <i class="bi bi-x-lg" style="font-size: 14px; -webkit-text-stroke: 1px;"></i>
                             </button>
@@ -75,10 +75,14 @@
                                     {
                                         <span class="badge bg-danger-subtle text-danger px-2 py-1 rounded-pill small fw-bold">Pasif</span>
                                     }
+                                    <span class="badge bg-secondary-subtle text-secondary px-2.5 py-1.5 rounded-pill small fw-semibold" style="font-size: 11px;">@item.property_type</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="text-secondary small">Gecelik Fiyat</span>
                                     <span class="text-dark fw-bold h5 mb-0">₺@item.price_per_night.ToString("N0")</span>
                                 </div>
                                 
-                                <a href="/Listing/Detail/@item.listId" class="btn btn-outline-primary w-100 rounded-pill py-2 small fw-bold shadow-sm transition-button">
+                                <a href="/Listing/Detail/@item.listId" class="btn btn-outline-primary w-100 rounded-pill py-2 small fw-bold shadow-sm transition-button mt-3">
                                     <i class="bi bi-eye-fill me-2"></i>Detayları İncele
                                 </a>
                             </div>

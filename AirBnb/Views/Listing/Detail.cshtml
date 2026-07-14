@@ -15,7 +15,7 @@
             <h1 class="h3 fw-bold text-dark mb-1">@Model.title</h1>
             <p class="text-muted small mb-0">
                 <i class="bi bi-geo-alt-fill text-danger me-1"></i>@Model.city, @Model.country 
-                <span class="badge bg-secondary-subtle text-secondary ms-2">@Model.property_type</span>
+                <span class="badge bg-secondary-subtle text-secondary ms-2">Konaklama Türü: @Model.property_type</span>
             </p>
         </div>
         <div class="d-flex gap-2">
@@ -46,7 +46,7 @@
                         <h4 class="h5 fw-bold text-dark mb-1">
                             Ev Sahibi: @(Model.host != null ? $"{Model.host.fname} {Model.host.lname}" : "Sistem Yöneticisi")
                         </h4>
-                        <p class="text-muted small mb-0">4 misafir · 2 yatak odası · 2 yatak · 1 banyo</p>
+                        <p class="text-muted small mb-0">@Model.max_guests misafir · @Model.room_count yatak odası · @Model.bathroom_count banyo</p>
                     </div>
                     <img src="@(Model.host != null && !string.IsNullOrEmpty(Model.host.avatar_url) ? Model.host.avatar_url : "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150")" 
                          class="rounded-circle object-fit-cover" width="55" height="55" alt="Ev Sahibi Profil">
@@ -85,38 +85,22 @@
 
                 <hr class="text-muted opacity-25">
 
+                <h5 class="fw-bold text-dark mb-3">Açık Adres</h5>
+                <p class="text-secondary line-height-lg">
+                    @Model.address
+                </p>
+
+                <hr class="text-muted opacity-25">
+
                 <h5 class="fw-bold text-dark mb-3">Konaklama yerinin sunduğu imkanlar</h5>
                 <div class="row g-2">
-                    <div class="col-md-6"><i class="bi bi-wifi me-2 text-success"></i> Kesintisiz Wi-Fi (Fiber)</div>
-                    <div class="col-md-6"><i class="bi bi-p-circle me-2 text-success"></i> Ücretsiz otopark</div>
-                    <div class="col-md-6"><i class="bi bi-water me-2 text-success"></i> Özel Havuz</div>
-                    <div class="col-md-6"><i class="bi bi-snow me-2 text-success"></i> Klima</div>
-                    <div class="col-md-6"><i class="bi bi-tv me-2 text-success"></i> 55" 4K Smart TV</div>
-                    <div class="col-md-6"><i class="bi bi-wind me-2 text-success"></i> Saç kurutma makinesi</div>
-                </div>
-            </div>
-            
-            <div class="card border-0 shadow-sm surface-card rounded-4 p-4">
-                <h5 class="fw-bold text-dark mb-3"><i class="bi bi-star-fill text-warning me-1"></i> 4.9 · 2 Yorum</h5>
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <div class="border rounded-3 p-3 h-100">
-                            <div class="d-flex align-items-center gap-2 mb-2">
-                                <strong class="text-dark">Ahmet Y.</strong>
-                                <span class="text-warning small"><i class="bi bi-star-fill"></i> 5</span>
-                            </div>
-                            <p class="text-muted small mb-0">"Hayatımda kaldığım en huzurlu yerdi. Ev sahibi çok ilgili, her şeyle nizamîce ilgilendi."</p>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="border rounded-3 p-3 h-100">
-                            <div class="d-flex align-items-center gap-2 mb-2">
-                                <strong class="text-dark">Elif K.</strong>
-                                <span class="text-warning small"><i class="bi bi-star-fill"></i> 5</span>
-                            </div>
-                            <p class="text-muted small mb-0">"Konumu çok iyi, temizlik kusursuzdu. Tekrar gelmeyi kesinlikle düşünüyoruz."</p>
-                        </div>
-                    </div>
+                    @if (!string.IsNullOrEmpty(Model.amenities))
+                    {
+                        foreach (var amenity in Model.amenities.Split(','))
+                        {
+                            <div class="col-md-6"><i class="bi bi-check-circle me-2 text-success"></i> @amenity.Trim()</div>
+                        }
+                    }
                 </div>
             </div>
         </div>
@@ -176,7 +160,7 @@
                         <span id="base-total-display" class="text-dark">₺0</span>
                     </div>
                     <div class="small text-secondary mb-3 d-flex justify-content-between">
-                        <span class="text-decoration-underline">Poyraz Hizmet Bedeli</span>
+                        <span class="text-decoration-underline">Hizmet Bedeli</span>
                         <span class="text-dark">₺450</span>
                     </div>
                     

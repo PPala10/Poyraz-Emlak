@@ -16,6 +16,7 @@ public class Listing
     public string city { get; set; }
     public string country { get; set; }
     public string property_type { get; set; }
+    public string amenities { get; set; }
     public int room_count { get; set; }
     public int bathroom_count { get; set; }
     public int max_guests { get; set; }
@@ -25,27 +26,16 @@ public class Listing
     public DateTime updated_at { get; set; }
     
     [NotMapped]
-    public string MainImage 
-    {
-        get
-        {
-            var type = property_type?.ToLower().Replace("ı", "i").Replace("ğ", "g").Replace("ü", "u").Replace("ş", "s").Replace("ö", "o").Replace("ç", "c").Trim();
-            if (type == "villa") return "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=500";
-            if (type == "dag evi" || type == "dag_evi") return "https://images.unsplash.com/photo-1510798831971-661eb04b3739?w=500";
-            if (type == "studyo") return "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=500";
-            if (type == "apartman dairesi" || type == "daire") return "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=500";
-            if (type == "tas ev" || type == "tas_evi" || type == "tas_ev") return "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=500";
-            return "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=500";
-        }
-    }
+    public string MainImage => ImageGallery.FirstOrDefault() ?? "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800";
 
     [NotMapped]
     public List<string> ImageGallery
     {
         get
         {
-            var type = property_type?.ToLower().Replace("ı", "i").Replace("ğ", "g").Replace("ü", "u").Replace("ş", "s").Replace("ö", "o").Replace("ç", "c").Trim();
-            if (type == "villa")
+            var type = property_type?.ToLower() ?? "";
+
+            if (type.Contains("villa"))
             {
                 return new List<string>
                 {
@@ -53,29 +43,21 @@ public class Listing
                     "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=500",
                     "https://images.unsplash.com/photo-1613977257363-707ba9348227?w=500",
                     "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=500"
-            };
-        }
-            if (type == "dag evi" || type == "dag_evi")
-            {
+                };
+            }
+        
+            if (type.Contains("dag") || type.Contains("dağ") || type.Contains("cabin"))
+            {   
                 return new List<string>
                 {
                     "https://images.unsplash.com/photo-1510798831971-661eb04b3739?w=800",
-                    "https://images.unsplash.com/photo-1449034446853-66c86144b0ad?w=500",
-                    "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=500",
-                    "https://images.unsplash.com/photo-1542718610-a1d656d1884c?w=500"
-                };
+                "https://images.unsplash.com/photo-1449034446853-66c86144b0ad?w=500",
+                "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=500",
+                "https://images.unsplash.com/photo-1542718610-a1d656d1884c?w=500"
+            };
             }
-            if (type == "tas ev" || type == "tas_evi" || type == "tas_ev")
-            {
-                return new List<string>
-                {
-                    "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800",
-                    "https://images.unsplash.com/photo-1502005229762-fc1b2b812ca5?w=500",
-                    "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=500",
-                    "https://images.unsplash.com/photo-1598228723793-52759bba239c?w=500"
-                };
-            }
-            if (type == "studyo")
+            
+            if (type.Contains("studyo") || type.Contains("stüdyo") || type.Contains("studio"))
             {
                 return new List<string>
                 {
@@ -85,12 +67,56 @@ public class Listing
                     "https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=500"
                 };
             }
+            
+            if (type.Contains("tas") || type.Contains("taş") || type.Contains("stone"))
+            {
+                return new List<string>
+                {
+                    "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800",
+                    "https://images.unsplash.com/photo-1502005229762-fc1b2b812ca5?w=500",
+                    "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=500",
+                    "https://images.unsplash.com/photo-1598228723793-52759bba239c?w=500"
+                };
+            }
+            
+            if (type.Contains("apartman") || type.Contains("daire") || type.Contains("flat"))
+            {
+                return new List<string>
+                {
+                    "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800",
+                    "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=500",
+                    "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=500",
+                    "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=500"
+                };
+            }
+
+            int remainder = listId % 3;
+            if (remainder == 0)
+            {
+                return new List<string>
+                {
+                    "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800",
+                    "https://images.unsplash.com/photo-1560185127-6a2806647f81?w=500",
+                    "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=500",
+                    "https://images.unsplash.com/photo-1502672014263-04e8544368fc?w=500"
+                };
+            }
+            if (remainder == 1)
+            {
+                return new List<string>
+                {
+                    "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800",
+                    "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=500",
+                    "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=500",
+                    "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=500"
+                };
+            }
             return new List<string>
             {
-                "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800",
-                "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=500",
-                "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=500",
-                "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=500"
+                "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800",
+                "https://images.unsplash.com/photo-1502005229762-fc1b2b812ca5?w=500",
+                "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=500",
+                "https://images.unsplash.com/photo-1598228723793-52759bba239c?w=500"
             };
         }
     }

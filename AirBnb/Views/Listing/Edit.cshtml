@@ -4,7 +4,7 @@
     ViewData["Title"] = "İlanı Düzenle";
 }
 
-<div class="container mt-4" style="max-width: 600px;">
+<div class="container mt-4" style="max-width: 750px;">
     <div class="card border-0 shadow-sm surface-card rounded-4 p-4 bg-white">
         <h2 class="h4 fw-bold text-dark mb-4">İlan Düzenleme Paneli</h2>
         
@@ -34,20 +34,70 @@
                 </div>
             </div>
 
+            <div class="mb-3">
+                <label class="form-label fw-bold small text-secondary">Açık Adres</label>
+                <textarea name="address" class="form-control rounded-3" rows="2" required>@Model.address</textarea>
+            </div>
+
             <div class="row g-3 mb-3">
                 <div class="col-6">
                     <label class="form-label fw-bold small text-secondary">Gecelik Fiyat (₺)</label>
                     <input type="number" name="price_per_night" class="form-control rounded-3" value="@Model.price_per_night" required>
                 </div>
                 <div class="col-6">
-                    <label class="form-label fw-bold small text-secondary">Mekan Türü</label>
+                    <label class="form-label fw-bold small text-secondary">Konaklama Türü</label>
                     <input type="text" name="property_type" class="form-control rounded-3" value="@Model.property_type" required>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-4">
+                    <label class="form-label fw-bold small text-secondary">Oda Sayısı</label>
+                    <input type="number" name="room_count" class="form-control rounded-3" value="@Model.room_count" required>
+                </div>
+                <div class="col-4">
+                    <label class="form-label fw-bold small text-secondary">Banyo Sayısı</label>
+                    <input type="number" name="bathroom_count" class="form-control rounded-3" value="@Model.bathroom_count" required>
+                </div>
+                <div class="col-4">
+                    <label class="form-label fw-bold small text-secondary">Maksimum Misafir</label>
+                    <input type="number" name="max_guests" class="form-control rounded-3" value="@Model.max_guests" required>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label fw-bold small text-secondary">İmkanlar (Virgülle ayırın)</label>
+                <input type="text" name="amenities" class="form-control rounded-3" value="@Model.amenities" placeholder="Wi-Fi, Havuz, Klima">
+            </div>
+
+            <div class="bg-light rounded-4 p-3 mb-4">
+                <h6 class="fw-bold text-dark mb-3 small text-uppercase"><i class="bi bi-calendar-event me-2 text-warning"></i>Takvim İstisnası ve Gün Engelleme</h6>
+                <div class="row g-3 mb-2">
+                    <div class="col-6">
+                        <label class="form-label small text-muted fw-semibold">Aralık Başlangıcı</label>
+                        <input type="date" name="sync_start" class="form-control rounded-3">
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label small text-muted fw-semibold">Aralık Bitişi</label>
+                        <input type="date" name="sync_end" class="form-control rounded-3">
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <label class="form-label small text-muted fw-semibold d-block">Bu Aralıktaki Günlerin Durumu</label>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="sync_blocked" id="status_open" value="false" checked>
+                        <label class="form-check-label small text-success fw-bold" for="status_open">Müsait / Rezervasyona Aç</label>
+                    </div>
+                    <div class="form-check form-check-inline ms-3">
+                        <input class="form-check-input" type="radio" name="sync_blocked" id="status_block" value="true">
+                        <label class="form-check-label small text-danger fw-bold" for="status_block">Engelli / Rezerviyona Kapat</label>
+                    </div>
                 </div>
             </div>
 
             <div class="form-check form-switch mb-4 p-3 bg-light rounded-3 d-flex justify-content-between align-items-center">
                 <div class="ms-2">
-                    <label class="form-check-label fw-bold text-dark small d-block" for="is_active">İlanı Yayına Al</label>
+                    <label class="form-check-label fw-bold text-dark small d-block" for="is_active">İlanı Yayına Al (Aktif)</label>
                     <span class="text-muted small" style="font-size: 11px;">Kapatılırsa sistemde pasif konuma geçer.</span>
                 </div>
                 <div>
