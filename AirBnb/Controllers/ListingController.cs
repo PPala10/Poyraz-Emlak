@@ -26,12 +26,16 @@ public class ListingController : Controller
     [HttpGet]
     public IActionResult Detail(int id)
     {
-        var listing = _context.Listings
-            .Include(l => l.host)
+        var listing = _context.Listings.Include(l => l.host)
+            .Include(listing => listing.reservations)
             .FirstOrDefault(l => l.listId == id);
         
         ViewBag.guests = _context.Users
-            .Where(u => u.role != null && u.role.ToLower().Contains("guest"))
+            .Where(u => u.role.ToLower().Contains("guest"))
+            .ToList();
+        
+        ViewBag.Reservations = listing?.reservations?
+            .Where(r => r.status != "Cancelled" && r.status != "cancelled")
             .ToList();
         
         return View(listing);
