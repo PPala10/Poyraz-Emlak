@@ -44,7 +44,7 @@ public class UserController : Controller
         _context.Users.Add(newUser); 
         _context.SaveChanges(); 
 
-        return RedirectToAction("Create", "Listing");
+        return RedirectToAction("Index", "User");
     }
     
     [HttpGet]

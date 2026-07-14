@@ -4,7 +4,7 @@ namespace AirBnb.Controllers;
 
 public class PaymentController : Controller
 {
-    public IActionResult Payment()
+    public IActionResult Index()
     {
         return View();
     }
