@@ -44,11 +44,7 @@ namespace AirBnb.Controllers
             }
 
             bool isOverlapping = _context.Reservations.Any(r => 
-                r.listId == listingId && 
-                r.status != "Cancelled" && 
-                r.status != "cancelled" &&
-                checkin_date.Date < r.check_out.Date && 
-                checkout_date.Date > r.check_in.Date
+                r.listId == listingId && r.status != "Cancelled" && r.status != "cancelled" && checkin_date.Date < r.check_out.Date && checkout_date.Date > r.check_in.Date
             );
 
             if (isOverlapping)
@@ -59,6 +55,16 @@ namespace AirBnb.Controllers
 
             DateTime utcCheckin = DateTime.SpecifyKind(checkin_date.Date, DateTimeKind.Utc);
             DateTime utcCheckout = DateTime.SpecifyKind(checkout_date.Date, DateTimeKind.Utc);
+            
+            bool isBlocked = _context.Availabilities.Any(a =>
+                a.listId == listingId && a.is_blocked && utcCheckin < a.end_date && utcCheckout > a.start_date);
+
+            if (isBlocked)
+            {
+                TempData["ErrorMessage"] = "Seçilen tarih aralığı ev sahibi tarafından bloke edilmiştir!";
+                return RedirectToAction("Detail", "Listing", new { id = listingId });
+            }
+            
             decimal serviceFee = 450;
             decimal finalPrice = (nights * currentListing.price_per_night) + serviceFee;
 
