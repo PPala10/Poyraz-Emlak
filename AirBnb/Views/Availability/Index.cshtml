@@ -1,0 +1,124 @@
+@model IEnumerable<AirBnb.Data.Listing>
+
+@{
+    ViewData["Title"] = "Müsaitlik Takvimi";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 fw-bold text-dark mb-0">Müsaitlik ve Takvim Yönetimi</h1>
+        <span class="badge bg-primary rounded-pill px-3 py-2 fw-bold">Aralık Bazlı Mimari</span>
+    </div>
+
+    <div class="row g-4">
+        @if (!Model.Any())
+        {
+            <div class="col-12 text-center my-5">
+                <i class="bi bi-calendar-x text-muted fs-1"></i>
+                <p class="text-muted mt-2">Sistemde aktif ilan bulunmuyor.</p>
+            </div>
+        }
+        else
+        {
+            @foreach (var listing in Model)
+            {
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
+                        <div class="card-body p-4">
+                            <div class="row align-items-center">
+                                
+                                <div class="col-md-3">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <img src="@listing.MainImage" class="rounded-3 object-fit-cover" style="width: 80px; height: 80px;" alt="Listing Image">
+                                        <div>
+                                            <h5 class="fw-bold text-dark mb-1 text-truncate" style="max-width: 180px;">@listing.title</h5>
+                                            <span class="badge bg-secondary-subtle text-secondary small">@listing.property_type</span>
+                                            <p class="text-muted small mb-0 mt-1"><i class="bi bi-geo-alt-fill me-1"></i>@listing.city</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <h6 class="fw-bold text-danger small text-uppercase mb-2">Ev Sahibi Engelli Aralıkları</h6>
+                                    @{
+                                        var blocks = listing.availabilities?
+                                            .Where(a => a.is_blocked)
+                                            .OrderBy(a => a.start_date)
+                                            .ToList() ?? new List<AirBnb.Data.Availability>();
+                                    }
+                                    @if (blocks.Any())
+                                    {
+                                        foreach (var b in blocks)
+                                        {
+                                            <div class="d-flex align-items-center gap-2 text-danger small mb-1">
+                                                <i class="bi bi-slash-circle"></i>
+                                                <span>@b.start_date.ToString("dd MMM") - @b.end_date.ToString("dd MMM yyyy")</span>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted small">Engellenen aralık yok.</span>
+                                    }
+                                </div>
+
+                                <div class="col-md-3">
+                                    <h6 class="fw-bold text-warning small text-uppercase mb-2">Dolu Dönemler (Rezervasyonlar)</h6>
+                                    @{
+                                        var activeBookings = listing.reservations?
+                                            .Where(r => r.status != "Cancelled" && r.status != "cancelled")
+                                            .OrderBy(r => r.check_in)
+                                            .ToList();
+                                    }
+                                    @if (activeBookings != null && activeBookings.Any())
+                                    {
+                                        foreach (var res in activeBookings)
+                                        {
+                                            <div class="d-flex align-items-center gap-2 text-muted small mb-1">
+                                                <i class="bi bi-calendar-x-fill text-warning"></i>
+                                                <span class="text-decoration-line-through">@res.check_in.ToString("dd MMM") - @res.check_out.ToString("dd MMM")</span>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <span class="text-success small"><i class="bi bi-check-circle-fill me-1"></i>Aktif rezervasyon yok.</span>
+                                    }
+                                </div>
+
+                                <div class="col-md-3 text-end">
+                                    <h6 class="fw-bold text-success small text-uppercase mb-2 text-start text-md-end">Genel Tanımlı Açık Dönemler</h6>
+                                    @{
+                                        var opens = listing.availabilities?
+                                            .Where(a => !a.is_blocked)
+                                            .OrderBy(a => a.start_date)
+                                            .ToList() ?? new List<AirBnb.Data.Availability>();
+                                    }
+                                    @if (opens.Any())
+                                    {
+                                        foreach (var o in opens)
+                                        {
+                                            <span class="badge bg-success-subtle text-success px-2.5 py-1.5 rounded-pill small fw-bold mb-1 d-inline-block">
+                                                @o.start_date.ToString("dd MMM") - @o.end_date.ToString("dd MMM")
+                                            </span>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary-subtle text-secondary px-2.5 py-1.5 rounded-pill small fw-bold">Açık Dönem Yok</span>
+                                    }
+                                    <div class="mt-2">
+                                        <a href="/Listing/Detail/@listing.listId" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold small">
+                                            <i class="bi bi-eye me-1"></i>İncele
+                                        </a>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>

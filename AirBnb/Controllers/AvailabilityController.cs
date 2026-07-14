@@ -1,16 +1,27 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using AirBnb.Data;
+using AirbnbClone.Data;
 
 namespace AirBnb.Controllers;
 
 public class AvailabilityController : Controller
 {
-    public IActionResult Index()
+    private readonly DataContext _context;
+
+    public AvailabilityController(DataContext context)
     {
-        return View();
+        _context = context;
     }
 
-    public IActionResult Detail(int id)
+    public IActionResult Index()
     {
-        return View();
+        var listings = _context.Listings
+            .Include(l => l.availabilities)
+            .Include(l => l.reservations)
+            .Where(l => l.is_active)
+            .ToList();
+
+        return View(listings);
     }
 }

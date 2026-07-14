@@ -9,6 +9,7 @@ public class Availability
     public int listId { get; set; } // FK
     public Listing listing { get; set; } // Navigation Prop
     
-    public DateTime date { get; set; }
+    public DateTime start_date { get; set; }
+    public DateTime end_date { get; set; }
     public bool is_blocked { get; set; }
 }

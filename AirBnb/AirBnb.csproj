@@ -16,8 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Availability\" />
-    <Folder Include="Views\ListingImage\" />
     <Folder Include="Views\Payment\" />
     <Folder Include="Views\Review\" />
   </ItemGroup>
