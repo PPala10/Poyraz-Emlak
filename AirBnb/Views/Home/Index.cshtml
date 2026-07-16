@@ -2,63 +2,150 @@
     ViewData["Title"] = "Genel Bakış";
 }
 
-<section class="surface-card mb-3">
-    <h1 class="h3">Poyraz Gayrimenkul - @(DateTime.UtcNow.AddHours(3).Hour < 18 ? "İyi Günler" : "İyi Akşamlar") Dileriz</h1>
-    <p class="text-muted mb-0">
-        Hızlı, güvenilir ve ucuz emlağın doğru adresi. Eviniz evimiz, sizler her şeyimizsiniz.
-    </p>
-</section>
+<style>
+    .dashboard-banner {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    }
+    .hover-card {
+        transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+        border: 1px solid rgba(0,0,0,.08) !important;
+    }
+    .hover-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.1) !important;
+        border-color: #0d6efd !important;
+    }
+    .icon-box {
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 14px;
+    }
+</style>
 
-<section class="surface-card mb-3">
-    <h2 class="h5 mb-3">Görüntülemek İstediğiniz Alana Tıklayın:</h2>
+<div class="p-5 mb-4 dashboard-banner rounded-4 border-0 shadow-sm position-relative overflow-hidden">
+    <div class="row align-items-center">
+        <div class="col-md-8">
+            <span class="badge bg-primary px-3 py-2 rounded-pill fw-bold mb-3 small shadow-sm">Hızlı • Güvenilir • Ucuz</span>
+            <h1 class="display-5 fw-bold text-dark mb-2">Poyraz Gayrimenkul</h1>
+            <p class="fs-5 text-secondary mb-0">
+                @(DateTime.UtcNow.AddHours(3).Hour < 18 ? "☀️ İyi günler" : "🌙 İyi akşamlar") dileriz. Eviniz evimiz, sizler her şeyimizsiniz.
+            </p>
+        </div>
+        <div class="col-md-4 d-none d-md-block text-end">
+            <i class="bi bi-building-up text-primary" style="font-size: 5.5rem; opacity: 0.85;"></i>
+        </div>
+    </div>
+</div>
+
+<section class="mb-4">
+    <h2 class="h5 fw-bold text-dark mb-4"><i class="bi bi-grid-fill me-2 text-primary"></i>Hızlı Yönetim Paneli</h2>
+    
     <div class="row g-3">
-    <div class="col-md-10 col-xl-4">
-        <div class="border rounded p-3 h-100 d-flex flex-column justify-content-between">
-            <span>Kullanıcılar</span>
-            <a class="btn btn-sm btn-outline-dark mt-2" asp-controller="User" asp-action="Index">Kullanıcıları Görüntüle</a>
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            <div class="card hover-card h-100 p-3 bg-white shadow-sm rounded-4 d-flex flex-column justify-content-between">
+                <div>
+                    <div class="icon-box bg-primary-subtle text-primary mb-3">
+                        <i class="bi bi-people-fill fs-4"></i>
+                    </div>
+                    <h6 class="fw-bold text-dark mb-1">Kullanıcılar</h6>
+                    <p class="text-muted small mb-3">Sistemdeki misafir ve ev sahiplerini inceleyin.</p>
+                </div>
+                <a class="btn btn-sm btn-outline-primary rounded-pill w-100 fw-bold py-1.5" asp-controller="User" asp-action="Index">Görüntüle</a>
+            </div>
         </div>
-    </div>        
-    <div class="col-md-10 col-xl-4">
-        <div class="border rounded p-3 h-100 d-flex flex-column justify-content-between">
-            <span>İlanlar</span>
-            <a class="btn btn-sm btn-outline-dark mt-2" asp-controller="Listing" asp-action="Index">İlanları Görüntüle</a>
+
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            <div class="card hover-card h-100 p-3 bg-white shadow-sm rounded-4 d-flex flex-column justify-content-between">
+                <div>
+                    <div class="icon-box bg-success-subtle text-success mb-3">
+                        <i class="bi bi-houses-fill fs-4"></i>
+                    </div>
+                    <h6 class="fw-bold text-dark mb-1">İlanlar</h6>
+                    <p class="text-muted small mb-3">Aktif mülkleri ve kiralık ilanları yönetin.</p>
+                </div>
+                <a class="btn btn-sm btn-outline-success rounded-pill w-100 fw-bold py-1.5" asp-controller="Listing" asp-action="Index">Görüntüle</a>
+            </div>
         </div>
-    </div>
-    <div class="col-md-10 col-xl-4">
-        <div class="border rounded p-3 h-100 d-flex flex-column justify-content-between">
-            <span>Müsaitlik Takvimi</span>
-            <a class="btn btn-sm btn-outline-dark mt-2" asp-controller="Availability" asp-action="Index">Müsaitlik Durumunu Görüntüle</a>
+
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            <div class="card hover-card h-100 p-3 bg-white shadow-sm rounded-4 d-flex flex-column justify-content-between">
+                <div>
+                    <div class="icon-box bg-info-subtle text-info mb-3">
+                        <i class="bi bi-calendar3 fs-4"></i>
+                    </div>
+                    <h6 class="fw-bold text-dark mb-1">Müsaitlik Takvimi</h6>
+                    <p class="text-muted small mb-3">Evlerin doluluk ve engelli aralıklarını ayarlayın.</p>
+                </div>
+                <a class="btn btn-sm btn-outline-info rounded-pill w-100 fw-bold py-1.5 text-dark" asp-controller="Availability" asp-action="Index">Görüntüle</a>
+            </div>
         </div>
-    </div>
-    <div class="col-md-10 col-xl-4">
-        <div class="border rounded p-3 h-100 d-flex flex-column justify-content-between">
-            <span>Rezervasyonlar</span>
-            <a class="btn btn-sm btn-outline-dark mt-2" asp-controller="Reservation" asp-action="Index">Rezervasyonları Görüntüle</a>
+
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            <div class="card hover-card h-100 p-3 bg-white shadow-sm rounded-4 d-flex flex-column justify-content-between">
+                <div>
+                    <div class="icon-box bg-warning-subtle text-warning mb-3">
+                        <i class="bi bi-journal-check fs-4"></i>
+                    </div>
+                    <h6 class="fw-bold text-dark mb-1">Rezervasyonlar</h6>
+                    <p class="text-muted small mb-3">Misafir konaklama ve tarih detaylarını görün.</p>
+                </div>
+                <a class="btn btn-sm btn-outline-warning rounded-pill w-100 fw-bold py-1.5 text-dark" asp-controller="Reservation" asp-action="Index">Görüntüle</a>
+            </div>
         </div>
-    </div>        
-    <div class="col-md-10 col-xl-4">
-        <div class="border rounded p-3 h-100 d-flex flex-column justify-content-between">
-            <span>Ödemeler</span>
-            <a class="btn btn-sm btn-outline-dark mt-2" asp-controller="Payment" asp-action="Index">Ödeme İşlemlerini Görüntüle</a>
+
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            <div class="card hover-card h-100 p-3 bg-white shadow-sm rounded-4 d-flex flex-column justify-content-between">
+                <div>
+                    <div class="icon-box bg-danger-subtle text-danger mb-3">
+                        <i class="bi bi-credit-card-2-front-fill fs-4"></i>
+                    </div>
+                    <h6 class="fw-bold text-dark mb-1">Ödemeler</h6>
+                    <p class="text-muted small mb-3">Hizmet bedeli ve finansal kayıtları denetleyin.</p>
+                </div>
+                <a class="btn btn-sm btn-outline-danger rounded-pill w-100 fw-bold py-1.5" asp-controller="Payment" asp-action="Index">Görüntüle</a>
+            </div>
         </div>
-    </div>
-    <div class="col-md-10 col-xl-4">
-        <div class="border rounded p-3 h-100 d-flex flex-column justify-content-between">
-            <span>Yorumlar</span>
-            <a class="btn btn-sm btn-outline-dark mt-2" asp-controller="Review" asp-action="Index">Yorumları Görüntüle</a>
+
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            <div class="card hover-card h-100 p-3 bg-white shadow-sm rounded-4 d-flex flex-column justify-content-between">
+                <div>
+                    <div class="icon-box bg-secondary-subtle text-secondary mb-3">
+                        <i class="bi bi-chat-right-heart-fill fs-4"></i>
+                    </div>
+                    <h6 class="fw-bold text-dark mb-1">Yorumlar</h6>
+                    <p class="text-muted small mb-3">Rezervasyon bazlı misafir değerlendirmeleri.</p>
+                </div>
+                <a class="btn btn-sm btn-outline-secondary rounded-pill w-100 fw-bold py-1.5" asp-controller="Review" asp-action="Index">Görüntüle</a>
+            </div>
         </div>
-    </div>
-    <div class="col-md-10 col-xl-4">
-        <div class="border rounded p-3 h-100 d-flex flex-column justify-content-between">
-            <span>İletişim</span>
-            <a class="btn btn-sm btn-outline-dark mt-2" asp-controller="Home" asp-action="Contact">Bizimle İletişime Geçin</a>
+
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            <div class="card hover-card h-100 p-3 bg-white shadow-sm rounded-4 d-flex flex-column justify-content-between">
+                <div>
+                    <div class="icon-box bg-dark-subtle text-dark mb-3">
+                        <i class="bi bi-envelope-paper-fill fs-4"></i>
+                    </div>
+                    <h6 class="fw-bold text-dark mb-1">İletişim</h6>
+                    <p class="text-muted small mb-3">Platform yöneticileriyle irtibata geçin.</p>
+                </div>
+                <a class="btn btn-sm btn-outline-dark rounded-pill w-100 fw-bold py-1.5" asp-controller="Home" asp-action="Contact">İletişime Geç</a>
+            </div>
         </div>
-    </div>
-    <div class="col-md-10 col-xl-4">
-        <div class="border rounded p-3 h-100 d-flex flex-column justify-content-between">
-            <span>Gizlilik</span>
-            <a class="btn btn-sm btn-outline-dark mt-2" asp-controller="Home" asp-action="Privacy">Gizlilik Sözleşmemizi Okuyun</a>
+
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            <div class="card hover-card h-100 p-3 bg-white shadow-sm rounded-4 d-flex flex-column justify-content-between">
+                <div>
+                    <div class="icon-box bg-light border text-dark mb-3">
+                        <i class="bi bi-shield-lock-fill fs-4"></i>
+                    </div>
+                    <h6 class="fw-bold text-dark mb-1">Gizlilik</h6>
+                    <p class="text-muted small mb-3">Kullanıcı verileri ve gizlilik sözleşmemiz.</p>
+                </div>
+                <a class="btn btn-sm btn-outline-dark rounded-pill w-100 fw-bold py-1.5" asp-controller="Home" asp-action="Privacy">Sözleşmeyi Oku</a>
+            </div>
         </div>
-    </div>
     </div>
 </section>
