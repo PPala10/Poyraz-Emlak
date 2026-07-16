@@ -9,6 +9,57 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
     <link rel="stylesheet" href="~/AirBnb.styles.css" asp-append-version="true"/>
+    <style>
+        .app-body {
+            background-color: #f8f9fa;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        .app-header {
+            z-index: 1030;
+        }
+        .app-shell {
+            display: flex;
+            min-height: calc(100vh - 116px);
+            padding: 0 !important;
+        }
+        .app-sidebar {
+            width: 260px;
+            background-color: #ffffff;
+            border-right: 1px solid rgba(0,0,0,0.07);
+            padding: 1.5rem 1rem;
+            flex-shrink: 0;
+        }
+        .app-content {
+            flex-grow: 1;
+            padding: 2rem;
+            background-color: #f8f9fa;
+            overflow-y: auto;
+        }
+        .sidebar-nav .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.6rem 1rem;
+            color: #495057;
+            font-weight: 500;
+            font-size: 14px;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+        .sidebar-nav .nav-link:hover {
+            background-color: #f1f3f5;
+            color: #0d6efd;
+        }
+        .sidebar-nav .nav-link.active {
+            background-color: #e8f0fe;
+            color: #0d6efd;
+        }
+        .app-footer {
+            background-color: #ffffff;
+            padding: 1rem 2rem;
+            font-size: 13px;
+        }
+    </style>
 </head>
 <body class="app-body">
     <header class="app-header border-bottom">
@@ -21,8 +72,8 @@
                 <div class="collapse navbar-collapse" id="topMenu">
                     <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
                         <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index">Genel Bakış</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-controller="Template" asp-action="Index">Gösterge Paneli</a></li>
-                        <li class="nav-item"><a class="btn btn-sm btn-dark" href="#">Host Setup</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-controller="Dashboard" asp-action="Index">Gösterge Paneli</a></li>
+                        <li class="nav-item"><a class="btn btn-sm btn-primary rounded-pill px-3 fw-bold" href="#">Host Setup</a></li>
                     </ul>
                 </div>
             </div>
@@ -31,18 +82,39 @@
 
     <div class="app-shell container-fluid">
         <aside class="app-sidebar">
-            <p class="text-uppercase small fw-semibold text-secondary mb-3">Sayfalar</p>
-            <nav class="nav flex-column gap-1">
-                <a class="nav-link" asp-controller="Home" asp-action="Index">Genel Bakış</a>
-                <a class="nav-link" asp-controller="Template" asp-action="Index">Gösterge Paneli</a>
-                <a class="nav-link" asp-controller="User" asp-action="Index">Kullanıcılar</a>
-                <a class="nav-link" asp-controller="Listing" asp-action="Index">İlanlar</a>
-                <a class="nav-link" asp-controller="Availability" asp-action="Index">Müsaitlik Takvimi</a>
-                <a class="nav-link" asp-controller="Reservation" asp-action="Index">Rezervasyonlar</a>
-                <a class="nav-link" href="#">Payments</a>
-                <a class="nav-link" asp-controller="Review" asp-action="Index">Yorumlar</a>
-                <a class="nav-link" asp-controller="Home" asp-action="Contact">Bizimle İletişime Geçin</a>
-
+            <p class="text-uppercase small fw-bold text-secondary mb-3 px-3" style="font-size: 11px; letter-spacing: 0.5px;">Sayfalar</p>
+            <nav class="nav flex-column sidebar-nav gap-1">
+                <a class="nav-link" asp-controller="Home" asp-action="Index">
+                    <i class="bi bi-grid-1x2-fill"></i> Genel Bakış
+                </a>
+                <a class="nav-link" asp-controller="Template" asp-action="Index">
+                    <i class="bi bi-speedometer2"></i> Gösterge Paneli
+                </a>
+                <a class="nav-link" asp-controller="User" asp-action="Index">
+                    <i class="bi bi-people-fill"></i> Kullanıcılar
+                </a>
+                <a class="nav-link" asp-controller="Listing" asp-action="Index">
+                    <i class="bi bi-houses-fill"></i> İlanlar
+                </a>
+                <a class="nav-link" asp-controller="Availability" asp-action="Index">
+                    <i class="bi bi-calendar3"></i> Müsaitlik Takvimi
+                </a>
+                <a class="nav-link" asp-controller="Reservation" asp-action="Index">
+                    <i class="bi bi-journal-check"></i> Rezervasyonlar
+                </a>
+                <a class="nav-link" asp-controller="Payment" asp-action="Index">
+                    <i class="bi bi-credit-card-2-front-fill"></i> Ödemeler
+                </a>
+                <a class="nav-link" asp-controller="Review" asp-action="Index">
+                    <i class="bi bi-chat-right-heart-fill"></i> Yorumlar
+                </a>
+                <hr class="my-2 text-secondary opacity-25">
+                <a class="nav-link" asp-controller="Home" asp-action="Privacy">
+                    <i class="bi bi-envelope-paper-fill"></i> Gizlilik Sözleşmemiz
+                </a>
+                <a class="nav-link" asp-controller="Home" asp-action="Contact">
+                    <i class="bi bi-envelope-paper-fill"></i> Bizimle İletişime Geçin
+                </a>
             </nav>
         </aside>
 
