@@ -93,7 +93,7 @@ The application will default to running on `http://localhost:5000` or `https://l
 
 ## 💳 Payment Verification Flow Overview
 
-* **Initialize Form:** The guest triggers `Payment/CheckOut`, compilation profiles build the `Buyer`, `Address`, and `BasketItem` payloads, sending a secure request to iyzico to fetch the `CheckoutFormContent`.
+* **Initialize Form:** The guest triggers `Payment/Checkout`, compilation profiles build the `Buyer`, `Address`, and `BasketItem` payloads, sending a secure request to iyzico to fetch the `CheckoutFormContent`.
 * **Authorize Payment:** The guest inputs credentials (such as iyzico Sandbox test cards) and finishes the 3D secure validation step.
 * **Execute Callback:** iyzico routes the safe token verification back to `/Payment/Callback?reservationId={id}` via an unauthenticated `POST`.
 * **Commit & Transition:** The system parses the state, verifies the transaction payload via `CheckoutForm.Retrieve`, sets the reservation state to `Confirmed`, updates the contextual database tracking, and logs the detailed billing record within the local ledger.
