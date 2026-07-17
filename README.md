@@ -45,11 +45,15 @@ Ensure you have the following installed on your local environment (e.g., macOS /
 git clone [https://github.com/your-username/AirBnbClone.git](https://github.com/your-username/AirBnbClone.git)
 cd AirBnbClone/AirBnb
 
+---
+
 ### 2. Install Dependencies
 Restore the standard NuGet packages along with the required iyzico SDK package:
 ```bash
 dotnet add package Iyzipay
 dotnet restore
+
+---
 
 ### 3. Environment Setup (appsettings.json)
 Configure your relational database connection string and populate your iyzico Sandbox API keys:
@@ -72,6 +76,8 @@ Configure your relational database connection string and populate your iyzico Sa
   "AllowedHosts": "*"
 }
 
+---
+
 ### 4. Database Migrations
 Execute the migrations to generate your tables, including Reservations, Listings, Guests, and Payments:
 ```bash
@@ -84,6 +90,8 @@ dotnet clean
 dotnet run
 
 The application will default to running on http://localhost:5000 or https://localhost:5001.
+
+---
 
 ## 💳 Payment Verification Flow Overview
 Initialize Form: The guest triggers Payment/CheckOut, compilation profiles build the Buyer, Address, and BasketItem payloads, sending a secure request to iyzico to fetch the CheckoutFormContent.
