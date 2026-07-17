@@ -7,7 +7,7 @@ This project is a high-performance, modern web application designed as an Airbnb
 ## 🚀 Features
 
 ### 1. Reservation & Booking Lifecycle
-* **Dynamic Status Tracking:** Bookings are initialized with a `PendingPayment` status, protecting the property availability until financial clearance is obtained.
+* **Dynamic Status Tracking:** Bookings are initialized with a `Pending` status, protecting the property availability until financial clearance is obtained.
 * **State-Driven UI Actions:** Action interfaces adapt dynamically to booking states (e.g., displaying the **Pay Now** button only during payment windows and swapping it with **Write Review** once confirmed).
 * **Graceful Cancellations:** Standardized cancellation requests handled via server-side post-backs.
 
