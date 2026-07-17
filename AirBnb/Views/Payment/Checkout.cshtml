@@ -1,0 +1,47 @@
+@model AirBnb.Data.Reservation
+
+@{
+    ViewData["Title"] = "Güvenli Ödeme";
+}
+
+<div class="container mt-4" style="max-width: 800px;">
+    <div class="row g-4">
+        <div class="col-md-5">
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white sticky-top" style="top: 20px;">
+                <h5 class="fw-bold text-dark mb-3">Sipariş Özeti</h5>
+                <img src="@Model.listing?.MainImage" class="img-fluid rounded-3 object-fit-cover mb-3" style="height: 150px; width: 100%;" alt="Listing">
+                <h6 class="fw-bold text-dark mb-1">@Model.listing?.title</h6>
+                <p class="text-muted small mb-3">@Model.listing?.city, @Model.listing?.country</p>
+                <hr class="my-3">
+                <div class="d-flex justify-content-between text-muted small mb-2">
+                    <span>Giriş:</span>
+                    <span class="fw-bold text-dark">@Model.check_in.ToString("dd MMM yyyy")</span>
+                </div>
+                <div class="d-flex justify-content-between text-muted small mb-2">
+                    <span>Çıkış:</span>
+                    <span class="fw-bold text-dark">@Model.check_out.ToString("dd MMM yyyy")</span>
+                </div>
+                <div class="d-flex justify-content-between text-muted small mb-3">
+                    <span>Süre:</span>
+                    <span class="fw-bold text-dark">@Model.total_nights Gece</span>
+                </div>
+                <hr class="my-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="fw-bold text-dark">Toplam Tutar:</span>
+                    <span class="fs-5 fw-bold text-success">₺@Model.total_price.ToString("N0")</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-7">
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+                <div class="text-center mb-4">
+                    <h4 class="fw-bold text-dark mb-1">iyzico Güvenli Ödeme</h4>
+                    <p class="text-muted small">Kart bilgileriniz doğrudan iyzico altyapısıyla şifrelenerek işlenir.</p>
+                </div>
+                <div id="iyzipay-checkout-form" class="responsive">
+                    @Html.Raw(ViewBag.CheckoutFormContent)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

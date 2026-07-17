@@ -76,7 +76,7 @@ namespace AirBnb.Controllers
                 check_out = utcCheckout,
                 total_nights = nights,
                 total_price = finalPrice,
-                status = "Confirmed",
+                status = "Pending",
                 created_at = DateTime.UtcNow,
                 updated_at = DateTime.UtcNow
             };

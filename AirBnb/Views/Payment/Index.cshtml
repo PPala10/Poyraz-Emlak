@@ -1,0 +1,70 @@
+@model IEnumerable<AirBnb.Data.Payment>
+
+@{
+    ViewData["Title"] = "Ödeme Kayıtları";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 fw-bold text-dark mb-1">Ödeme İşlemleri</h1>
+            <p class="text-muted small mb-0">Platform genelinde iyzico üzerinden yapılan tüm tahsilatları buradan izleyebilirsiniz.</p>
+        </div>
+        <span class="badge bg-success rounded-pill px-3 py-2 fw-bold">Toplam Ciro: ₺@Model.Sum(p => p.amount).ToString("N0")</span>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-4 py-3 text-secondary small fw-bold text-uppercase">İşlem ID / Tarih</th>
+                        <th class="py-3 text-secondary small fw-bold text-uppercase">Rezervasyon / Misafir</th>
+                        <th class="py-3 text-secondary small fw-bold text-uppercase">Ödenen Tutar</th>
+                        <th class="py-3 text-secondary small fw-bold text-uppercase">iyzico İşlem No</th>
+                        <th class="pe-4 py-3 text-end text-secondary small fw-bold text-uppercase">Durum</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center py-5 text-muted">
+                                <i class="bi bi-credit-card-2-back fs-1"></i>
+                                <p class="mt-2 mb-0">Sistemde henüz hiç ödeme kaydı bulunmuyor.</p>
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        foreach (var payment in Model)
+                        {
+                            <tr>
+                                <td class="ps-4">
+                                    <span class="badge bg-light text-dark rounded-pill border fw-bold">#@payment.paymentId</span>
+                                    <div class="text-muted small mt-1" style="font-size: 11px;">@payment.created_at.ToString("dd MMM yyyy HH:mm")</div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2 mb-1">
+                                        <span class="fw-bold text-dark">@payment.reservation?.guest?.fname @payment.reservation?.guest?.lname</span>
+                                        <span class="text-muted small">(#@payment.reservationId)</span>
+                                    </div>
+                                    <small class="text-muted d-block text-truncate" style="max-width: 250px;">@payment.reservation?.listing?.title</small>
+                                </td>
+                                <td>
+                                    <span class="fw-bold text-success">₺@payment.amount.ToString("N0") (@payment.currency)</span>
+                                </td>
+                                <td>
+                                    <code class="text-dark bg-light px-2 py-1 rounded small">@payment.provider_tx_id</code>
+                                </td>
+                                <td class="pe-4 text-end">
+                                    <span class="badge bg-success-subtle text-success px-2.5 py-1.5 rounded-pill small fw-bold">@payment.status</span>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

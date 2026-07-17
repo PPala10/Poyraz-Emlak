@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Iyzipay" Version="2.1.78" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.9">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -16,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Payment\" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\site.js" />
   </ItemGroup>
 
 </Project>
