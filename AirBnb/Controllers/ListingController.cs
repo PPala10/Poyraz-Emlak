@@ -10,11 +10,14 @@ public class ListingController : Controller
 {
     private readonly DataContext _context;
     
+    // Controller for Listing Entity's Page with MVC Protocol
     public ListingController(DataContext context)
     {
         _context = context;
     }
     
+    // Main listing page (index) view method.
+    // Every user can view all listings. 
     [Authorize]
     public IActionResult Index()
     {
@@ -25,6 +28,10 @@ public class ListingController : Controller
         return View(listings);
     }
 
+    // Detail page view method for each listings with id based implementation.
+    // Every user can view all listings. 
+    // In detail page guests can create reservations; thus, system pushes the guest list to the view.
+    // In order to make reservation user must be guest and verification must be true and listing must be active.
     [HttpGet]
     public IActionResult Detail(int id)
     {
@@ -33,7 +40,7 @@ public class ListingController : Controller
             .FirstOrDefault(l => l.listId == id);
         
         ViewBag.guests = _context.Users
-            .Where(u => u.role.ToLower().Contains("guest"))
+            .Where(u => u.role.ToLower().Contains("guest") && u.is_verified == true)
             .ToList();
         
         ViewBag.Reservations = listing?.reservations?
@@ -43,6 +50,9 @@ public class ListingController : Controller
         return View(listing);
     }
     
+    // Create page view method.
+    // Only admins and hosts can create a listing for their house or buildings.
+    // For admins system pushes all hosts to the view in order to select they and assign they to the listing's ownership.
     [HttpGet]
     [Authorize(Roles = "Admin,Host")]
     public IActionResult Create()
@@ -55,6 +65,10 @@ public class ListingController : Controller
         return View();
     }
     
+    // Create page form method.
+    // System takes all inputs come from frontend selection boxes and creating the new listing object to save it on Database.
+    // Hosts can declare some ranges in schedule to blocked area and there is not allowed to book a reservation in that range.
+    // This act is not mandatory but hosts can make it. Even if they keep the blocked area empty, system will accept the form.
     [HttpPost]
     [Authorize(Roles = "Admin,Host")]
     public IActionResult Create(Listing listing, DateTime availabilityStart, DateTime availabilityEnd)
@@ -77,6 +91,10 @@ public class ListingController : Controller
         return RedirectToAction("Index");
     }
 
+    // Edit page view method.
+    // Only admins and hosts can edit a listing for their house or buildings.
+    // For admins system pushes all hosts to the view in order to select they and assign they to the listing's ownership.
+    // Approximately same dynamics of create form.
     [HttpGet]
     [Authorize(Roles = "Admin,Host")]
     public IActionResult Edit(int id)
@@ -87,9 +105,14 @@ public class ListingController : Controller
         return View(listing);
     }
     
+    // Edit page form method.
+    // System takes all inputs come from frontend selection boxes and manipulating the existed listing object to save it on Database.
+    // Hosts can declare some ranges in schedule to blocked area and there is not allowed to book a reservation in that range.
+    // This act is not mandatory but hosts can make it. Even if they keep the blocked area empty, system will accept the form.
+    // At the end of the editing period system again calculates the blocked ranges and updates the availability page and DbSet.
     [HttpPost]
     [Authorize(Roles = "Admin,Host")]
-    public IActionResult Edit(Listing updatedListing, DateTime? sync_start, DateTime? sync_end, bool? sync_blocked)
+    public IActionResult Edit(Listing updatedListing, DateTime? syncStart, DateTime? syncEnd, bool? syncBlocked)
     {
         var existingListing = _context.Listings.FirstOrDefault(l => l.listId == updatedListing.listId);
         if (existingListing == null) return NotFound();
@@ -109,10 +132,10 @@ public class ListingController : Controller
         existingListing.is_active = updatedListing.is_active;
         existingListing.updated_at = DateTime.UtcNow;
 
-        if (sync_start.HasValue && sync_end.HasValue && sync_end >= sync_start && sync_blocked.HasValue)
+        if (syncStart.HasValue && syncEnd.HasValue && syncEnd >= syncStart && syncBlocked.HasValue)
         {
-            var utcStart = DateTime.SpecifyKind(sync_start.Value.Date, DateTimeKind.Utc);
-            var utcEnd = DateTime.SpecifyKind(sync_end.Value.Date, DateTimeKind.Utc);
+            var utcStart = DateTime.SpecifyKind(syncStart.Value.Date, DateTimeKind.Utc);
+            var utcEnd = DateTime.SpecifyKind(syncEnd.Value.Date, DateTimeKind.Utc);
 
             var overlapping = _context.Availabilities
                 .Where(a => a.listId == updatedListing.listId && a.start_date <= utcEnd && a.end_date >= utcStart)
@@ -125,7 +148,7 @@ public class ListingController : Controller
                 listId = updatedListing.listId,
                 start_date = utcStart,
                 end_date = utcEnd,
-                is_blocked = sync_blocked.Value
+                is_blocked = syncBlocked.Value
             });
         }
 
@@ -133,6 +156,12 @@ public class ListingController : Controller
         return RedirectToAction("Index");
     }
 
+    // Delete form mechanism which take listing's id from frontend and delete it from Database.
+    // Same as editing, deleting mechanism utilizing id based system, method firstly check the existence of id and compare them. 
+    // After the id comparison, method also checks the existence reservations which belong to the listing.
+    // If there is any reservation exists, because of the restriction rules system first delete the reservation.
+    // After the deletion of reservation, systems deletes the listing.
+    // Returns the index page.
     [Authorize(Roles = "Admin,Host")]
     public IActionResult Delete(int id)
     {

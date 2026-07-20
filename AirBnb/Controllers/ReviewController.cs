@@ -10,11 +10,15 @@ public class ReviewController : Controller
 {
     private readonly DataContext _context;
     
+    // Controller for Review Entity's Page with MVC Protocol
     public ReviewController(DataContext context)
     {
         _context = context;
     }
     
+    // Main review page (index) view method.
+    // Any user role can view all the reviews, there is no restriction.
+    // Page shows all reviews with guest which creates the review, rating and review itself.
     [HttpGet]
     public IActionResult Index()
     {
@@ -28,6 +32,9 @@ public class ReviewController : Controller
         return View(reviews);
     }
     
+    // Create page for reviews.
+    // Each user only create review for their reservation and each reservation has only one review from one user.
+    // System first check user's reservations by id based standards.
     [HttpGet]
     public IActionResult Create(int reservationId)
     {
@@ -52,6 +59,10 @@ public class ReviewController : Controller
         return View(reservation);
     }
     
+    // Create form for generating review.
+    // User gives the input of rating between 1 and 5 and comment for review.
+    // Review created with using user inputs and system added it to the Database.
+    // It returns the detail page of listing which published review about it.
     [HttpPost]
     public IActionResult Create(int reservationId, int rating, string comment)
     {
@@ -87,6 +98,7 @@ public class ReviewController : Controller
         return RedirectToAction("Detail", "Listing", new { id = reservation.listId });
     }
 
+    // Only admin can delete published reviews.
     [HttpPost]
     [Authorize(Roles = "Admin")]
     public IActionResult Delete(int id)

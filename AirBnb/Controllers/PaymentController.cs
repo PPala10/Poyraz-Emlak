@@ -8,12 +8,15 @@ using Payment = AirBnb.Data.Payment;
 
 namespace AirBnb.Controllers
 {
+    // Controller for Payment Entity's Page with MVC Protocol
     public class PaymentController : Controller
     {
         private readonly DataContext _context;
         private readonly IConfiguration _configuration;
         private readonly Options _iyzicoOptions;
 
+        // I used iyzico's infrastructure to take payment and handle it in sandbox test environment.
+        // API and SecretKey keep in appsettings.json file and I took it from iyzico's developer website.
         public PaymentController(DataContext context, IConfiguration configuration)
         {
             _context = context;
@@ -26,7 +29,9 @@ namespace AirBnb.Controllers
                 BaseUrl = _configuration["Iyzico:BaseUrl"]
             };
         }
-
+    
+        // Main user page (index) view method.
+        // This pages shows all reservations which their payments completed and their iyzico's number 
         [HttpGet]
         public IActionResult Index()
         {
@@ -41,6 +46,12 @@ namespace AirBnb.Controllers
             return View(payments);
         }
 
+        // Checkout mechanism which receives the reservation ID from the request and initializes the iyzico payment process.
+        // The method first fetches the reservation from the database along with its associated listing and guest details.
+        // If the reservation exists, it constructs the payment request including buyer, shipping, billing, and basket item details.
+        // After setting up the request payload, the method calls the iyzico API to generate the checkout form.
+        // If initialization is successful, it passes the form content to the View;
+        // otherwise, it redirects to the Reservation page with an error.
         [HttpGet]
         public async Task<IActionResult> CheckOut(int reservationId)
         {
@@ -118,6 +129,11 @@ namespace AirBnb.Controllers
             return RedirectToAction("Index", "Reservation");
         }
 
+        // Callback mechanism which receives the payment token from iyzico and the reservation ID from the URL.
+        // The method validates the incoming parameters and queries the iyzico API to retrieve the payment status.
+        // Upon verifying that the payment was successful, it updates the reservation status to 'Confirmed'.
+        // It then creates and persists a new Payment record in the database with the transaction details.
+        // Redirects to the Reservation page with a success message on completion, or an error message if verification fails.
         [HttpPost]
         public async Task<IActionResult> Callback([FromForm] string token, [FromQuery] int reservationId)
         {

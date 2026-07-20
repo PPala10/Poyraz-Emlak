@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace AirBnb.Controllers
 {
+    // Controller for Reservation Entity's Page with MVC Protocol
     public class ReservationController : Controller
     {
         private readonly DataContext _context;
@@ -16,6 +17,12 @@ namespace AirBnb.Controllers
             _context = context;
         }
 
+        // Main reservation page (index) view method.
+        // The display of reservations on this page changes according to the role of the user viewing the page.
+        // If the user is an admin, they can view all reservations.
+        // If the user is a host or a guest:
+        // they view only the reservations made for their own listing (in the case of a host)
+        // or only the reservations they have made themselves (in the case of a guest).
         [Authorize]
         public async Task<IActionResult> Index()
         {
@@ -42,6 +49,13 @@ namespace AirBnb.Controllers
             return View(reservations);
         }
 
+        // In booking method system wants some inputs to add reservation to Database.
+        // First one variable named duration in a TimeSpan object keeps the reservation duration.
+        // And then one variable named nights initialized because of checking invalid date range and overbooking.
+        // Also this variable checks the blocked ranges which determined by host.
+        // After the checking processes, price_per_night multiplies with duration and service fee added.
+        // Reservation saved on a Database with relating attributes, price and status = "Pending"
+        // Pending status stayed on Database until payment proceeded.
         [HttpPost]
         public IActionResult Book(int listingId, int guestId, DateTime checkin_date, DateTime checkout_date)
         {
@@ -60,11 +74,11 @@ namespace AirBnb.Controllers
                 return RedirectToAction("Detail", "Listing", new { id = listingId });
             }
 
-            bool isOverlapping = _context.Reservations.Any(r => 
+            bool isOverbooking = _context.Reservations.Any(r => 
                 r.listId == listingId && r.status != "Cancelled" && r.status != "cancelled" && checkin_date.Date < r.check_out.Date && checkout_date.Date > r.check_in.Date
             );
 
-            if (isOverlapping)
+            if (isOverbooking)
             {
                 TempData["ErrorMessage"] = "Seçilen tarih aralığında bu ilan için doluluk mevcuttur.";
                 return RedirectToAction("Detail", "Listing", new { id = listingId });
@@ -111,6 +125,9 @@ namespace AirBnb.Controllers
             return RedirectToAction("Index");
         }
         
+        // System first compares the id which comes from input and Database.
+        // If they match, system deletes the reservation from Database.
+        // This action can be executed all roles of users.
         [HttpPost]
         public IActionResult Cancel(int id)
         {

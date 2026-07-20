@@ -7,6 +7,7 @@ using AirBnb.Data;
 
 namespace AirBnb.Controllers
 {
+    // Controller for Login and Register Pages with MVC Protocol
     public class AccountController : Controller
     {
         private readonly DataContext _context;
@@ -16,12 +17,20 @@ namespace AirBnb.Controllers
             _context = context;
         }
 
+        // Main register page (index) view method.
         [HttpGet]
         public IActionResult Register()
         {
             return View();
         }
 
+        // Register form mechanism which take the user's attributes from frontend and save it in Database
+        // Firstly system checks existing users using email base comparison. If there is an email match, 
+        // Systems returns error with message and do not allow the registration.
+        // In this register page admin registration cannot be possible. 
+        // Only another admin or superadmin (will be mentioned in login method) can add another admin
+        // Or change the user's role to an admin.
+        // Returns the login page if registration be successful and save the user in Database.
         [HttpPost]
         public async Task<IActionResult> Register(string fname, string lname, string email, string password,
             string phone, string role)
@@ -53,12 +62,23 @@ namespace AirBnb.Controllers
             return RedirectToAction("Login");
         }
 
+        // Main register page (index) view method.
         [HttpGet]
         public IActionResult Login()
         {
             return View();
         }
 
+        // Login form mechanism which take the user's attributes from frontend and check it with Database's recordings.
+        // Firstly system checks if user write to superadmin123 to a username.
+        // It is a backdoor for quick test cases for admin capability.
+        // If username is superadmin123, system do not want password and user directly login the page with admin role.
+        // System will assign the email to superadmin admin@poyrazgayrimenkul.com
+        // Any username input will be considered a normal user and password is strictly necessary to login.
+        // Systems firstly checks the existence of username or emails and password in Database and confirms the existence.
+        // After the verification of unique inputs, system creates a claim with user's attributes in a list
+        // And create an identity card in order to use it in a cookie authentication
+        // Returns the home page if login be successful.
         [HttpPost]
         public async Task<IActionResult> Login(string username, string password)
         {
@@ -100,9 +120,14 @@ namespace AirBnb.Controllers
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, userPrincipal);
 
-            return RedirectToAction("Index", "Reservation");
+            return RedirectToAction("Index", "Home");
         }
 
+        // Main logout method.
+        // async keyword is that we are going to perform an asynchronous operation within the method.
+        // It deletes and invalidates the session cookie written to the browser when the user logs in.
+        // The moment this line executes, it terminates the user's session.
+        // Returns the login page after the logout.
         [HttpGet]
         public async Task<IActionResult> Logout()
         {

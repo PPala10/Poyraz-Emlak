@@ -9,11 +9,15 @@ public class AvailabilityController : Controller
 {
     private readonly DataContext _context;
 
+    // Controller for Availability Entity's Page with MVC Protocol
     public AvailabilityController(DataContext context)
     {
         _context = context;
     }
 
+    // Main availability page (index) view method.
+    // Any user role can view all the availability ranges for listings, there is no restriction.
+    // It shows all open and busy ranges from schedule which determined by hosts and exists reservations.
     public IActionResult Index()
     {
         var listings = _context.Listings

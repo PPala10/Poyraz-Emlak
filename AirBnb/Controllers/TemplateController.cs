@@ -7,6 +7,7 @@ using System.Linq;
 
 namespace AirBnb.Controllers
 {
+    // Controller for Dashboard Page with MVC Protocol
     public class TemplateController : Controller
     {
         private readonly DataContext _context;
@@ -18,7 +19,7 @@ namespace AirBnb.Controllers
 
         public IActionResult Index()
         {
-            var model = new DashBoardViewModel();
+            var model = new Dashboard();
 
             model.totalListing = _context.Listings.Count();
             model.totalUser = _context.Users.Count(u => !string.IsNullOrEmpty(u.role) && u.role.Trim().ToLower() == "host");
