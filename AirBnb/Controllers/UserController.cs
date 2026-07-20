@@ -1,5 +1,6 @@
 using AirBnb.Data;
 using AirbnbClone.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AirBnb.Controllers;
@@ -13,6 +14,7 @@ public class UserController : Controller
         _context = context;
     }
     
+    [Authorize(Roles = "Admin")]
     public IActionResult Index()
     {
         var allUsers = _context.Users.ToList();

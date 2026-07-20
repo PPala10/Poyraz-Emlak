@@ -51,7 +51,7 @@
                         <tr>
                             <td class="ps-4">
                                 <div class="d-flex align-items-center gap-3">
-                                    <img src="@review.reviewer?.avatar_url" class="rounded-circle object-fit-cover" style="width: 40px; height: 40px;" alt="Avatar">
+                                    <img src="@(string.IsNullOrEmpty(review.reviewer?.avatar_url) ? "/images/default-avatar.jpg" : review.reviewer?.avatar_url)" class="rounded-circle object-fit-cover" style="width: 40px; height: 40px;" alt="Avatar">
                                     <div>
                                         <h6 class="fw-bold text-dark mb-0">@review.reviewer?.fname @review.reviewer?.lname</h6>
                                         <small class="text-muted">@review.reviewer?.email</small>
@@ -96,18 +96,22 @@
                                     <a href="/Listing/Detail/@review.listingId" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-semibold">
                                         <i class="bi bi-eye me-1"></i>İlana Git
                                     </a>
-                                    <form action="/Review/Delete" method="post" onsubmit="return confirm('Bu yorumu sistemden tamamen silmek istediğinize emin misiniz');" class="d-inline">
-                                        <input type="hidden" name="id" value="@review.reviewId" />
-                                        <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3 fw-semibold">
-                                            <i class="bi bi-trash3-fill me-1"></i>Kaldır
-                                        </button>
-                                    </form>
+
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <form action="/Review/Delete" method="post" onsubmit="return confirm('Bu yorumu sistemden tamamen silmek istediğinize emin misiniz?');" class="d-inline">
+                                            <input type="hidden" name="id" value="@review.reviewId" />
+                                            <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3 fw-semibold">
+                                                <i class="bi bi-trash3-fill me-1"></i>Kaldır
+                                            </button>
+                                        </form>
+                                    }
                                 </div>
                             </td>
                         </tr>
-                        }
-                        }
-                        </tbody>
+                    }
+                }
+                </tbody>
             </table>
         </div>
     </div>

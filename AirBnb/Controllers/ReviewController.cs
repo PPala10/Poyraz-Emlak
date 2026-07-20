@@ -1,5 +1,6 @@
 using AirBnb.Data;
 using AirbnbClone.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -87,6 +88,7 @@ public class ReviewController : Controller
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public IActionResult Delete(int id)
     {
         var review = _context.Reviews.FirstOrDefault(r => r.reviewId == id);

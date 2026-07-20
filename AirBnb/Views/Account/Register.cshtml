@@ -1,0 +1,82 @@
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kayıt Ol - AirBnbClone</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        body { background-color: #f7f7f7; font-family: system-ui, -apple-system, sans-serif; }
+        .card-register { border-radius: 16px; border: 1px solid #dddddd; max-width: 450px; width: 100%; }
+        .btn-airbnb { background-color: #ff385c; color: white; border: none; font-weight: bold; }
+        .btn-airbnb:hover { background-color: #e61e4d; color: white; }
+    </style>
+</head>
+<body class="d-flex align-items-center justify-content-center min-vh-100 p-3">
+
+    <div class="card card-register bg-white shadow-sm p-4">
+        <div class="text-center mb-4">
+            <i class="bi bi-person-plus-fill text-danger fs-1"></i>
+            <h2 class="h4 fw-bold text-dark mt-2">Yeni Hesap Oluştur</h2>
+            <p class="text-muted small">Rolünüzü seçerek sisteme kayıt olun.</p>
+        </div>
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger rounded-3 p-2.5 small mb-3 fw-bold" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-1"></i> @TempData["ErrorMessage"]
+            </div>
+        }
+
+        <form action="/Account/Register" method="post">
+            <div class="row g-2 mb-3">
+                <div class="col">
+                    <label class="form-label small fw-bold text-secondary">Adınız</label>
+                    <input type="text" name="fname" class="form-control rounded-3" required />
+                </div>
+                <div class="col">
+                    <label class="form-label small fw-bold text-secondary">Soyadınız</label>
+                    <input type="text" name="lname" class="form-control rounded-3" required />
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label small fw-bold text-secondary">E-posta Adresi</label>
+                <input type="email" name="email" class="form-control rounded-3" placeholder="ornek@email.com" required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label small fw-bold text-secondary">Telefon Numarası</label>
+                <input type="tel" name="phone" class="form-control rounded-3" placeholder="+90 5XX XXX XX XX" required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label small fw-bold text-secondary">Kullanıcı Tipi (Rol)</label>
+                <select name="role" class="form-select rounded-3" required>
+                    <option value="Guest" selected>Misafir</option>
+                    <option value="Host">Ev Sahibi</option>
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label small fw-bold text-secondary">Şifre</label>
+                <input type="password" name="password" class="form-control rounded-3" required />
+            </div>
+
+            <button type="submit" class="btn btn-airbnb w-100 py-2.5 rounded-3 mb-3">Kayıt Ol</button>
+
+            <div class="text-center">
+                <span class="text-muted small">Zaten hesabınız var mı?</span>
+                <a href="/Account/Login" class="text-danger small fw-bold text-decoration-none ms-1">Giriş Yap</a>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>

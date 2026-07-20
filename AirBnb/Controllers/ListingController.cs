@@ -1,5 +1,6 @@
 using AirBnb.Data;
 using AirbnbClone.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,6 +15,7 @@ public class ListingController : Controller
         _context = context;
     }
     
+    [Authorize]
     public IActionResult Index()
     {
         var listings = _context.Listings
@@ -42,6 +44,7 @@ public class ListingController : Controller
     }
     
     [HttpGet]
+    [Authorize(Roles = "Admin,Host")]
     public IActionResult Create()
     {
         var hosts = _context.Users
@@ -53,6 +56,7 @@ public class ListingController : Controller
     }
     
     [HttpPost]
+    [Authorize(Roles = "Admin,Host")]
     public IActionResult Create(Listing listing, DateTime availabilityStart, DateTime availabilityEnd)
     {
         _context.Listings.Add(listing);
@@ -74,6 +78,7 @@ public class ListingController : Controller
     }
 
     [HttpGet]
+    [Authorize(Roles = "Admin,Host")]
     public IActionResult Edit(int id)
     {
         var listing = _context.Listings.FirstOrDefault(l => l.listId == id);
@@ -83,6 +88,7 @@ public class ListingController : Controller
     }
     
     [HttpPost]
+    [Authorize(Roles = "Admin,Host")]
     public IActionResult Edit(Listing updatedListing, DateTime? sync_start, DateTime? sync_end, bool? sync_blocked)
     {
         var existingListing = _context.Listings.FirstOrDefault(l => l.listId == updatedListing.listId);
@@ -127,6 +133,7 @@ public class ListingController : Controller
         return RedirectToAction("Index");
     }
 
+    [Authorize(Roles = "Admin,Host")]
     public IActionResult Delete(int id)
     {
         var relatedReservations = _context.Reservations.Where(r => r.listId == id).ToList();

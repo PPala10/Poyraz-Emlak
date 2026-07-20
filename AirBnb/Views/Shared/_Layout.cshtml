@@ -73,7 +73,32 @@
                     <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
                         <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index">Genel Bakış</a></li>
                         <li class="nav-item"><a class="nav-link" asp-controller="Template" asp-action="Index">Gösterge Paneli</a></li>
-                        <li class="nav-item"><a class="btn btn-sm btn-primary rounded-pill px-3 fw-bold" href="#">Host Setup</a></li>
+                        
+                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item d-flex align-items-center gap-2 me-2">
+                                <i class="bi bi-person-circle fs-5 text-secondary"></i>
+                                <span class="fw-bold small text-dark">@User.Identity.Name</span>
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <span class="badge bg-danger rounded-pill" style="font-size: 10px;">Admin</span>
+                                }
+                            </li>
+                            <li class="nav-item">
+                                <a asp-controller="Account" asp-action="Logout" class="btn btn-outline-danger btn-sm rounded-pill px-3 fw-bold d-flex align-items-center gap-1">
+                                    <i class="bi bi-box-arrow-right"></i> Çıkış Yap
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a asp-controller="Account" asp-action="Login" class="btn btn-outline-dark btn-sm rounded-pill px-3 fw-bold">Giriş Yap</a>
+                            </li>
+                            <li class="nav-item">
+                                <a asp-controller="Account" asp-action="Register" class="btn btn-danger btn-sm rounded-pill px-3 fw-bold">Kayıt Ol</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
@@ -81,39 +106,53 @@
     </header>
 
     <div class="app-shell container-fluid">
-        <aside class="app-sidebar">
+       <aside class="app-sidebar">
             <p class="text-uppercase small fw-bold text-secondary mb-3 px-3" style="font-size: 11px; letter-spacing: 0.5px;">Sayfalar</p>
             <nav class="nav flex-column sidebar-nav gap-1">
                 <a class="nav-link" asp-controller="Home" asp-action="Index">
                     <i class="bi bi-grid-1x2-fill"></i> Genel Bakış
                 </a>
-                <a class="nav-link" asp-controller="Template" asp-action="Index">
-                    <i class="bi bi-speedometer2"></i> Gösterge Paneli
-                </a>
-                <a class="nav-link" asp-controller="User" asp-action="Index">
-                    <i class="bi bi-people-fill"></i> Kullanıcılar
-                </a>
-                <a class="nav-link" asp-controller="Listing" asp-action="Index">
-                    <i class="bi bi-houses-fill"></i> İlanlar
-                </a>
-                <a class="nav-link" asp-controller="Availability" asp-action="Index">
-                    <i class="bi bi-calendar3"></i> Müsaitlik Takvimi
-                </a>
-                <a class="nav-link" asp-controller="Reservation" asp-action="Index">
-                    <i class="bi bi-journal-check"></i> Rezervasyonlar
-                </a>
-                <a class="nav-link" asp-controller="Payment" asp-action="Index">
-                    <i class="bi bi-credit-card-2-front-fill"></i> Ödemeler
-                </a>
-                <a class="nav-link" asp-controller="Review" asp-action="Index">
-                    <i class="bi bi-chat-right-heart-fill"></i> Yorumlar
-                </a>
+
+                @if (User.IsInRole("Admin"))
+                {
+                    <a class="nav-link" asp-controller="Template" asp-action="Index">
+                        <i class="bi bi-speedometer2"></i> Gösterge Paneli
+                    </a>
+                    <a class="nav-link" asp-controller="User" asp-action="Index">
+                        <i class="bi bi-people-fill"></i> Kullanıcı Yönetimi
+                    </a>
+                    <a class="nav-link" asp-controller="Payment" asp-action="Index">
+                        <i class="bi bi-credit-card-2-front-fill"></i> Tüm Ödemeler
+                    </a>
+                }
+
+                @if (User.IsInRole("Admin") || User.IsInRole("Host"))
+                {
+                    <a class="nav-link" asp-controller="Availability" asp-action="Index">
+                        <i class="bi bi-calendar3"></i> Müsaitlik Takvimi
+                    </a>
+                }
+
+                @if (User.Identity != null && User.Identity.IsAuthenticated)
+                {
+                    <!-- İlanları artık Guest dahil herkes sidebar'da görür -->
+                    <a class="nav-link" asp-controller="Listing" asp-action="Index">
+                        <i class="bi bi-houses-fill"></i> İlanlar
+                    </a>
+                    <a class="nav-link" asp-controller="Reservation" asp-action="Index">
+                        <i class="bi bi-journal-check"></i> Rezervasyonlar
+                    </a>
+                    <a class="nav-link" asp-controller="Review" asp-action="Index">
+                        <i class="bi bi-chat-right-heart-fill"></i> Yorumlar
+                    </a>
+                }
+
                 <hr class="my-2 text-secondary opacity-25">
                 <a class="nav-link" asp-controller="Home" asp-action="Privacy">
                     <i class="bi bi-envelope-paper-fill"></i> Gizlilik Sözleşmemiz
                 </a>
                 <a class="nav-link" asp-controller="Home" asp-action="Contact">
-                    <i class="bi bi-envelope-paper-fill"></i> Bizimle İletişime Geçin
+                    <i class="bi bi-envelope-paper-fill"></i> İletişim
                 </a>
             </nav>
         </aside>

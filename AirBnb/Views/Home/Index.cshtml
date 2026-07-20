@@ -42,85 +42,103 @@
 
 <section class="mb-4">
     <h2 class="h5 fw-bold text-dark mb-4"><i class="bi bi-grid-fill me-2 text-primary"></i>Hızlı Yönetim Paneli</h2>
-    
     <div class="row g-3">
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-            <div class="card hover-card h-100 p-3 bg-white shadow-sm rounded-4 d-flex flex-column justify-content-between">
-                <div>
-                    <div class="icon-box bg-primary-subtle text-primary mb-3">
-                        <i class="bi bi-people-fill fs-4"></i>
+        
+        @if (User.IsInRole("Admin"))
+        {
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <div class="card hover-card h-100 p-3 bg-white shadow-sm rounded-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="icon-box bg-primary-subtle text-primary mb-3">
+                            <i class="bi bi-people-fill fs-4"></i>
+                        </div>
+                        <h6 class="fw-bold text-dark mb-1">Kullanıcılar</h6>
+                        <p class="text-muted small mb-3">Sistemdeki misafir ve ev sahiplerini inceleyin.</p>
                     </div>
-                    <h6 class="fw-bold text-dark mb-1">Kullanıcılar</h6>
-                    <p class="text-muted small mb-3">Sistemdeki misafir ve ev sahiplerini inceleyin.</p>
+                    <a class="btn btn-sm btn-outline-primary rounded-pill w-100 fw-bold py-1.5" asp-controller="User" asp-action="Index">Görüntüle</a>
                 </div>
-                <a class="btn btn-sm btn-outline-primary rounded-pill w-100 fw-bold py-1.5" asp-controller="User" asp-action="Index">Görüntüle</a>
             </div>
-        </div>
+        }
 
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-            <div class="card hover-card h-100 p-3 bg-white shadow-sm rounded-4 d-flex flex-column justify-content-between">
-                <div>
-                    <div class="icon-box bg-success-subtle text-success mb-3">
-                        <i class="bi bi-houses-fill fs-4"></i>
+        @if (User.Identity != null && User.Identity.IsAuthenticated)
+        {
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <div class="card hover-card h-100 p-3 bg-white shadow-sm rounded-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="icon-box bg-success-subtle text-success mb-3">
+                            <i class="bi bi-houses-fill fs-4"></i>
+                        </div>
+                        <h6 class="fw-bold text-dark mb-1">İlanlar</h6>
+                        <p class="text-muted small mb-3">Aktif mülkleri ve kiralık ilanları inceleyin.</p>
                     </div>
-                    <h6 class="fw-bold text-dark mb-1">İlanlar</h6>
-                    <p class="text-muted small mb-3">Aktif mülkleri ve kiralık ilanları yönetin.</p>
+                    <a class="btn btn-sm btn-outline-success rounded-pill w-100 fw-bold py-1.5" asp-controller="Listing" asp-action="Index">Görüntüle</a>
                 </div>
-                <a class="btn btn-sm btn-outline-success rounded-pill w-100 fw-bold py-1.5" asp-controller="Listing" asp-action="Index">Görüntüle</a>
             </div>
-        </div>
+        }
 
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-            <div class="card hover-card h-100 p-3 bg-white shadow-sm rounded-4 d-flex flex-column justify-content-between">
-                <div>
-                    <div class="icon-box bg-info-subtle text-info mb-3">
-                        <i class="bi bi-calendar3 fs-4"></i>
+        @if (User.IsInRole("Admin") || User.IsInRole("Host"))
+        {
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <div class="card hover-card h-100 p-3 bg-white shadow-sm rounded-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="icon-box bg-info-subtle text-info mb-3">
+                            <i class="bi bi-calendar3 fs-4"></i>
+                        </div>
+                        <h6 class="fw-bold text-dark mb-1">Müsaitlik Takvimi</h6>
+                        <p class="text-muted small mb-3">Evlerin doluluk ve engelli aralıklarını ayarlayın.</p>
                     </div>
-                    <h6 class="fw-bold text-dark mb-1">Müsaitlik Takvimi</h6>
-                    <p class="text-muted small mb-3">Evlerin doluluk ve engelli aralıklarını ayarlayın.</p>
+                    <a class="btn btn-sm btn-outline-info rounded-pill w-100 fw-bold py-1.5 text-dark" asp-controller="Availability" asp-action="Index">Görüntüle</a>
                 </div>
-                <a class="btn btn-sm btn-outline-info rounded-pill w-100 fw-bold py-1.5 text-dark" asp-controller="Availability" asp-action="Index">Görüntüle</a>
             </div>
-        </div>
+        }
 
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-            <div class="card hover-card h-100 p-3 bg-white shadow-sm rounded-4 d-flex flex-column justify-content-between">
-                <div>
-                    <div class="icon-box bg-warning-subtle text-warning mb-3">
-                        <i class="bi bi-journal-check fs-4"></i>
+        @if (User.Identity != null && User.Identity.IsAuthenticated)
+        {
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <div class="card hover-card h-100 p-3 bg-white shadow-sm rounded-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="icon-box bg-warning-subtle text-warning mb-3">
+                            <i class="bi bi-journal-check fs-4"></i>
+                        </div>
+                        <h6 class="fw-bold text-dark mb-1">Rezervasyonlar</h6>
+                        <p class="text-muted small mb-3">Misafir konaklama ve tarih detaylarını görün.</p>
                     </div>
-                    <h6 class="fw-bold text-dark mb-1">Rezervasyonlar</h6>
-                    <p class="text-muted small mb-3">Misafir konaklama ve tarih detaylarını görün.</p>
+                    <a class="btn btn-sm btn-outline-warning rounded-pill w-100 fw-bold py-1.5 text-dark" asp-controller="Reservation" asp-action="Index">Görüntüle</a>
                 </div>
-                <a class="btn btn-sm btn-outline-warning rounded-pill w-100 fw-bold py-1.5 text-dark" asp-controller="Reservation" asp-action="Index">Görüntüle</a>
             </div>
-        </div>
+        }
 
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-            <div class="card hover-card h-100 p-3 bg-white shadow-sm rounded-4 d-flex flex-column justify-content-between">
-                <div>
-                    <div class="icon-box bg-danger-subtle text-danger mb-3">
-                        <i class="bi bi-credit-card-2-front-fill fs-4"></i>
+        @if (User.IsInRole("Admin"))
+        {
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <div class="card hover-card h-100 p-3 bg-white shadow-sm rounded-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="icon-box bg-danger-subtle text-danger mb-3">
+                            <i class="bi bi-credit-card-2-front-fill fs-4"></i>
+                        </div>
+                        <h6 class="fw-bold text-dark mb-1">Ödemeler</h6>
+                        <p class="text-muted small mb-3">Hizmet bedeli ve finansal kayıtları denetleyin.</p>
                     </div>
-                    <h6 class="fw-bold text-dark mb-1">Ödemeler</h6>
-                    <p class="text-muted small mb-3">Hizmet bedeli ve finansal kayıtları denetleyin.</p>
+                    <a class="btn btn-sm btn-outline-danger rounded-pill w-100 fw-bold py-1.5" asp-controller="Payment" asp-action="Index">Görüntüle</a>
                 </div>
-                <a class="btn btn-sm btn-outline-danger rounded-pill w-100 fw-bold py-1.5" asp-controller="Payment" asp-action="Index">Görüntüle</a>
             </div>
-        </div>
+        }
 
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-            <div class="card hover-card h-100 p-3 bg-white shadow-sm rounded-4 d-flex flex-column justify-content-between">
-                <div>
-                    <div class="icon-box bg-secondary-subtle text-secondary mb-3">
-                        <i class="bi bi-chat-right-heart-fill fs-4"></i>
+        @if (User.Identity != null && User.Identity.IsAuthenticated)
+        {
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <div class="card hover-card h-100 p-3 bg-white shadow-sm rounded-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="icon-box bg-secondary-subtle text-secondary mb-3">
+                            <i class="bi bi-chat-right-heart-fill fs-4"></i>
+                        </div>
+                        <h6 class="fw-bold text-dark mb-1">Yorumlar</h6>
+                        <p class="text-muted small mb-3">Rezervasyon bazlı misafir değerlendirmeleri.</p>
                     </div>
-                    <h6 class="fw-bold text-dark mb-1">Yorumlar</h6>
-                    <p class="text-muted small mb-3">Rezervasyon bazlı misafir değerlendirmeleri.</p>
+                    <a class="btn btn-sm btn-outline-secondary rounded-pill w-100 fw-bold py-1.5" asp-controller="Review" asp-action="Index">Görüntüle</a>
                 </div>
-                <a class="btn btn-sm btn-outline-secondary rounded-pill w-100 fw-bold py-1.5" asp-controller="Review" asp-action="Index">Görüntüle</a>
             </div>
-        </div>
+        }
 
         <div class="col-12 col-sm-6 col-md-4 col-lg-3">
             <div class="card hover-card h-100 p-3 bg-white shadow-sm rounded-4 d-flex flex-column justify-content-between">
@@ -147,5 +165,6 @@
                 <a class="btn btn-sm btn-outline-dark rounded-pill w-100 fw-bold py-1.5" asp-controller="Home" asp-action="Privacy">Sözleşmeyi Oku</a>
             </div>
         </div>
+
     </div>
 </section>

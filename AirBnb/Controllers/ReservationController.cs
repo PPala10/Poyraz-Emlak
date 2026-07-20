@@ -1,7 +1,9 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AirBnb.Data;
 using AirbnbClone.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AirBnb.Controllers
 {
@@ -14,14 +16,29 @@ namespace AirBnb.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        [Authorize]
+        public async Task<IActionResult> Index()
         {
-            var reservations = _context.Reservations
-                                       .Include(r => r.guest)
-                                       .Include(r => r.listing)
-                                       .OrderByDescending(r => r.check_in)
-                                       .ToList();
+            var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            int.TryParse(userIdClaim, out int currentUserId);
 
+            IQueryable<Reservation> query = _context.Reservations
+                .Include(r => r.listing)
+                .Include(r => r.guest);
+
+            if (User.IsInRole("Admin"))
+            {
+            }
+            else if (User.IsInRole("Host"))
+            {
+                query = query.Where(r => r.listing != null && r.listing.hostId == currentUserId);
+            }
+            else
+            {
+                query = query.Where(r => r.guestId == currentUserId);
+            }
+
+            var reservations = await query.ToListAsync();
             return View(reservations);
         }
 
