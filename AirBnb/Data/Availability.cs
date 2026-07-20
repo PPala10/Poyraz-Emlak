@@ -2,6 +2,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AirBnb.Data;
 
+// Database Model for Availability Table
+// It has one to many relationship with listing table
+// Availability page shows us to available ranges that determined by host and days which can be booked.
 public class Availability
 {
     [Key]

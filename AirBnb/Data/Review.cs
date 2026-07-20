@@ -2,6 +2,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AirBnb.Data;
 
+// Database Model for Review Table
+// It has one to one relationship with reservaition table
+// It has one to many relationship with user table
+// It has one to many relationship with listing table
+// Every user can create one review for each reservation.
+// Reviews can be controlled and manipulated by admins 
+// Reviews can be monitoring by every user role.
 public class Review
 {
     [Key]

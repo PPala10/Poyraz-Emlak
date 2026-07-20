@@ -3,6 +3,15 @@ using System.Runtime.InteropServices.JavaScript;
 
 namespace AirBnb.Data;
 
+// Database Model for User Table
+// It has one to many relationship with listing table
+// It has one to many relationship with reservation table
+// It has one to many relationship with review table
+// There are three user role for this database (Admin, Host, Guest)
+// Admin is a main role for controlling, manipulating and organizing the attributes of software.
+// Host can create and edit listing details, availability range and view the reviews.
+// Guest can book a reservation and make payment about it. Also, he/she can write a review about their booking
+// Guest review only activated after the payment succession.
 public class User
 {
     [Key]

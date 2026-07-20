@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AirbnbClone.Data
 {
+    // Db context organizes the relationships between entities and keeps the DbSets for entities.
     public class DataContext : DbContext
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options)

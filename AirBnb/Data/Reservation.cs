@@ -2,6 +2,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AirBnb.Data;
 
+// Database Model for Reservation Table
+// It has one to many relationship with user table
+// It has one to many relationship with listing table
+// It has one to one relationship with payment table
+// It has one to many relationship with review table
+// Reservation page shows us to both confirmed and not confirmed (not purchased) reservations. 
+// If guest purchases the reservation he/she can gain the review right. 
+// If they still do not complete the purchase of reservation, make payment button is activated instead of make review.
 public class Reservation
 {
     [Key]

@@ -2,6 +2,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AirBnb.Data;
 
+
+// Database Model for Payment Table
+// It has one to one relationship with reservation table
+// Payment page shows us to purchased and confirmed reservations  
+// In addition that it provides payment infrastructure with using iyzico's sandbox virtual pos machine.
 public class Payment
 {
     [Key]
