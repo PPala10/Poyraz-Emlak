@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
 using AirbnbClone.Data;
 using AirBnb.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace AirBnb.Controllers
 {
@@ -15,6 +16,30 @@ namespace AirBnb.Controllers
         public AccountController(DataContext context)
         {
             _context = context;
+        }
+        
+        // Helper method in order to hash already existed passwords in Database
+        // Thanks to this method all password in Database encrypted and stored.
+        [HttpGet]
+        public async Task<IActionResult> MigratePasswords()
+        {
+            var users = _context.Users.ToList();
+            var passwordHasher = new PasswordHasher<User>();
+            int updatedCount = 0;
+
+            foreach (var user in users)
+            {
+                if (string.IsNullOrEmpty(user.password) || !user.password.StartsWith("AQAAAA"))
+                {
+                    user.password = passwordHasher.HashPassword(user, user.password);
+                    updatedCount++;
+                }
+            }
+            
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = $"{updatedCount} adet kullanıcının şifresi başarıyla hash'lendi!";
+            return RedirectToAction("Login");
         }
 
         // Main register page (index) view method.
@@ -30,6 +55,7 @@ namespace AirBnb.Controllers
         // In this register page admin registration cannot be possible. 
         // Only another admin or superadmin (will be mentioned in login method) can add another admin
         // Or change the user's role to an admin.
+        // Passwords are encrypted by EfCore's hash functions and stored in database with hash versions
         // Returns the login page if registration be successful and save the user in Database.
         [HttpPost]
         public async Task<IActionResult> Register(string fname, string lname, string email, string password,
@@ -52,8 +78,13 @@ namespace AirBnb.Controllers
                 password = password,
                 role = userRole,
                 phone = phone,
-                avatar_url = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150"
+                avatar_url = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150",
+                created_at = DateTime.Now,
+                updated_at = DateTime.Now
             };
+            
+            var locker = new PasswordHasher<User>();
+            newUser.password = locker.HashPassword(newUser, password);
 
             _context.Users.Add(newUser);
             await _context.SaveChangesAsync();
@@ -76,9 +107,10 @@ namespace AirBnb.Controllers
         // System will assign the email to superadmin admin@poyrazgayrimenkul.com
         // Any username input will be considered a normal user and password is strictly necessary to login.
         // Systems firstly checks the existence of username or emails and password in Database and confirms the existence.
+        // Hashed passwords are decrypted and system compares the user's password input and decrypted hash password.
         // After the verification of unique inputs, system creates a claim with user's attributes in a list
         // And create an identity card in order to use it in a cookie authentication
-        // Returns the home page if login be successful.
+        // Returns the home page if login is successful.
         [HttpPost]
         public async Task<IActionResult> Login(string username, string password)
         {
@@ -101,9 +133,19 @@ namespace AirBnb.Controllers
             }
 
             var user = _context.Users.FirstOrDefault(u => u.email == username && u.password == password);
+            
             if (user == null)
             {
                 TempData["ErrorMessage"] = "Hatalı e-posta veya şifre.";
+                return View();
+            }
+            
+            var locker = new PasswordHasher<User>();
+            var verificationResult = locker.VerifyHashedPassword(user, user.password, password);
+            
+            if (verificationResult == PasswordVerificationResult.Failed)
+            {
+                TempData["ErrorMessage"] = "Hatalı şifre girdiniz.";
                 return View();
             }
 
