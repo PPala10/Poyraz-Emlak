@@ -16,7 +16,7 @@ namespace AirbnbClone.Data
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Payment> Payments { get; set; }
-
+        public DbSet<ListingImage> ListingImages { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -67,6 +67,12 @@ namespace AirbnbClone.Data
                 .HasOne(rw => rw.listing)
                 .WithMany(l => l.reviews)
                 .HasForeignKey(rw => rw.listingId)
+                .OnDelete(DeleteBehavior.Cascade);
+            
+            modelBuilder.Entity<ListingImage>()
+                .HasOne(li => li.listing)
+                .WithMany(l => l.Images)
+                .HasForeignKey(li => li.listingId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

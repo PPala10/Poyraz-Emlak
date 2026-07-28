@@ -18,6 +18,8 @@ public class Listing
     public int hostId { get; set; } // FK
     public User host { get; set; }  // Navigation Prop
     
+    public List<ListingImage> Images { get; set; }
+    
     public string title { get; set; }
     public string description { get; set; }
     public string address { get; set; }
@@ -41,6 +43,11 @@ public class Listing
     {
         get
         {
+            if (Images != null && Images.Any())
+            {
+                return Images.Select(img => img.imagePath).ToList();
+            }
+            
             var type = property_type?.ToLower() ?? "";
 
             if (type.Contains("villa"))
@@ -97,34 +104,13 @@ public class Listing
                     "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=500"
                 };
             }
-
-            int remainder = listId % 3;
-            if (remainder == 0)
-            {
-                return new List<string>
-                {
-                    "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800",
-                    "https://images.unsplash.com/photo-1560185127-6a2806647f81?w=500",
-                    "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=500",
-                    "https://images.unsplash.com/photo-1502672014263-04e8544368fc?w=500"
-                };
-            }
-            if (remainder == 1)
-            {
-                return new List<string>
-                {
-                    "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800",
-                    "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=500",
-                    "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=500",
-                    "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=500"
-                };
-            }
+            
             return new List<string>
             {
-                "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800",
-                "https://images.unsplash.com/photo-1502005229762-fc1b2b812ca5?w=500",
-                "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=500",
-                "https://images.unsplash.com/photo-1598228723793-52759bba239c?w=500"
+                "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800",
+                "https://images.unsplash.com/photo-1560185127-6a2806647f81?w=500",
+                "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=500",
+                "https://images.unsplash.com/photo-1502672014263-04e8544368fc?w=500"
             };
         }
     }

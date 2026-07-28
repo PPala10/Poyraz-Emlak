@@ -9,11 +9,14 @@ namespace AirBnb.Controllers;
 public class ListingController : Controller
 {
     private readonly DataContext _context;
+    private readonly IWebHostEnvironment _env;
+
     
     // Controller for Listing Entity's Page with MVC Protocol
-    public ListingController(DataContext context)
+    public ListingController(DataContext context,  IWebHostEnvironment env)
     {
         _context = context;
+        _env = env;
     }
     
     // Main listing page (index) view method.
@@ -35,8 +38,10 @@ public class ListingController : Controller
     [HttpGet]
     public IActionResult Detail(int id)
     {
-        var listing = _context.Listings.Include(l => l.host)
+        var listing = _context.Listings
+            .Include(l => l.host)
             .Include(listing => listing.reservations)
+            .Include(l => l.Images)
             .FirstOrDefault(l => l.listId == id);
         
         ViewBag.guests = _context.Users
@@ -179,5 +184,45 @@ public class ListingController : Controller
         }
 
         return RedirectToAction("Index");
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> UploadImage(int id, List<IFormFile> files)
+    {
+        var listing = await _context.Listings
+            .Include(l => l.Images)
+            .FirstOrDefaultAsync(l => l.listId == id);
+
+        var uploadsFolder = Path.Combine(_env.WebRootPath, "uploads");
+        Directory.CreateDirectory(uploadsFolder);
+
+        foreach (var file in files)
+        {
+            if (file.Length > 0)
+            {
+                var listingImage = new ListingImage
+                {
+                    listingId = listing.listId,
+                    imagePath = ""
+                };
+
+                _context.ListingImages.Add(listingImage);
+                await _context.SaveChangesAsync(); 
+
+                var extension = Path.GetExtension(file.FileName);
+                var fileName = $"{listing.listId}_{listingImage.imageId}{extension}";
+                var filePath = Path.Combine(uploadsFolder, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                listingImage.imagePath = $"/uploads/{fileName}";
+            }
+        }
+
+        await _context.SaveChangesAsync();
+        return RedirectToAction("Details", new { id });
     }
 }
