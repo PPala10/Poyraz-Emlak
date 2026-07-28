@@ -69,22 +69,22 @@ namespace AirBnb.Controllers
             }
             
             string userRole = (role == "Host") ? "Host" : "Guest";
+            
+            var locker = new PasswordHasher<User>();
+            var hashedPassword = locker.HashPassword(null!, password);
 
             var newUser = new User
             {
                 fname = fname,
                 lname = lname,
                 email = email,
-                password = password,
+                password = hashedPassword,
                 role = userRole,
                 phone = phone,
                 avatar_url = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150",
                 created_at = DateTime.Now,
                 updated_at = DateTime.Now
             };
-            
-            var locker = new PasswordHasher<User>();
-            newUser.password = locker.HashPassword(newUser, password);
 
             _context.Users.Add(newUser);
             await _context.SaveChangesAsync();
@@ -132,7 +132,7 @@ namespace AirBnb.Controllers
                 return RedirectToAction("Index", "Reservation");
             }
 
-            var user = _context.Users.FirstOrDefault(u => u.email == username && u.password == password);
+            var user = _context.Users.FirstOrDefault(u => u.email == username);
             
             if (user == null)
             {
