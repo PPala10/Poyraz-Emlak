@@ -362,3 +362,7 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd.DS_Store
 .idea/
+
+# Uploaded images (runtime-generated, not source code)
+AirBnb/wwwroot/uploads/*
+!AirBnb/wwwroot/uploads/.gitkeep
