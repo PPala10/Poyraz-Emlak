@@ -72,8 +72,10 @@
                 <div class="collapse navbar-collapse" id="topMenu">
                     <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
                         <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index">Genel Bakış</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-controller="Template" asp-action="Index">Gösterge Paneli</a></li>
-                        
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item"><a class="nav-link" asp-controller="Template" asp-action="Index">Gösterge Paneli</a></li>
+                        }
                         @if (User.Identity != null && User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item d-flex align-items-center gap-2 me-2">
@@ -82,6 +84,14 @@
                                 @if (User.IsInRole("Admin"))
                                 {
                                     <span class="badge bg-danger rounded-pill" style="font-size: 10px;">Admin</span>
+                                }
+                                @if (User.IsInRole("Host"))
+                                {
+                                    <span class="badge bg-success rounded-pill" style="font-size: 10px;">Host</span>
+                                }
+                                @if (User.IsInRole("Guest"))
+                                {
+                                    <span class="badge bg-primary rounded-pill" style="font-size: 10px;">Guest</span>
                                 }
                             </li>
                             <li class="nav-item">

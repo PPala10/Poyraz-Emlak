@@ -1,3 +1,4 @@
+@using System.Security.Claims
 @model IEnumerable<AirBnb.Data.Listing>
 
 @{
@@ -38,8 +39,13 @@
         }
         else
         {
+            var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             @foreach (var item in Model)
             {
+                if (User.IsInRole("Host") && item.hostId.ToString() != currentUserId)
+                {
+                    continue;
+                }
                 <div class="col">
                     <div class="card h-100 border-0 shadow-sm surface-card rounded-4 position-relative overflow-hidden transition-card">
                         

@@ -1,3 +1,4 @@
+@using System.Security.Claims
 @model AirBnb.Data.Listing
 
 @{
@@ -122,8 +123,9 @@
                             <span>@TempData["ErrorMessage"]</span>
                         </div>
                     }
-
-                    <div class="border rounded-3 mb-3 overflow-hidden">
+                    @if (!User.IsInRole("Host"))
+                    {
+                        <div class="border rounded-3 mb-3 overflow-hidden">
                         <div class="row g-0 border-bottom">
                             <div class="col-6 border-end p-2">
                                 <label class="d-block text-uppercase text-muted fw-bold" style="font-size: 10px;">Giriş Tarihi</label>
@@ -134,31 +136,51 @@
                                 <input type="date" id="checkout-date" name="checkout_date" class="form-control form-control-sm border-0 p-0 text-dark bg-transparent" value="@nextWeekDate" required>
                             </div>
                         </div>
-                        <div class="p-2">
-                            <label class="d-block text-uppercase text-muted fw-bold" style="font-size: 10px;">Rezervasyon Yapacak Misafir</label>
-                            <select name="guestId" class="form-select form-select-sm border-0 p-0 text-dark bg-transparent" required>
-                                <option value="">-- Misafir Seçin --</option>
-                                @if (ViewBag.guests != null)
-                                {
-                                    foreach (var guest in (List<AirBnb.Data.User>)ViewBag.guests)
+                        <div class="p-3 rounded-3 bg-light border-0">
+                            <p class="text-uppercase text-muted fw-semibold mb-2" style="font-size: 11px; letter-spacing: 0.04em;">
+                                Rezervasyon Yapacak Misafir
+                            </p>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <select name="guestId" class="form-select form-select-sm border-0 bg-white shadow-sm" required>
+                                    <option value="">Misafir seçin</option>
+                                    @if (ViewBag.guests != null)
                                     {
-                                        <option value="@guest.userId">@guest.fname @guest.lname</option>
+                                        foreach (var guest in (List<AirBnb.Data.User>)ViewBag.guests)
+                                        {
+                                            <option value="@guest.userId">@guest.fname @guest.lname</option>
+                                        }
                                     }
-                                }
-                            </select>
+                                </select>
+                            }
+                            else if (User.IsInRole("Guest"))
+                            {
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="rounded-circle bg-primary bg-opacity-10 d-flex align-items-center justify-content-center flex-shrink-0"
+                                         style="width: 36px; height: 36px;">
+                                        <i class="bi bi-person-fill text-primary" style="font-size: 16px;"></i>
+                                    </div>
+                                    <div class="flex-grow-1 overflow-hidden">
+                                        <p class="fw-semibold mb-0 text-truncate" style="font-size: 14px;">@User.Identity?.Name</p>
+                                    </div>
+                                    <i class="bi bi-lock-fill text-muted" style="font-size: 14px;"></i>
+                                </div>
+                                <input type="hidden" name="guestId" value="@User.FindFirst(ClaimTypes.NameIdentifier)?.Value" />
+                            }
                         </div>
                     </div>
-
                     <button type="submit" id="btn-reserve" class="btn btn-primary btn-lg w-100 rounded-pill fs-6 shadow-sm fw-bold mb-3">
                         Rezervasyon Yap
                     </button>
                     
                     <p class="text-center text-muted small mb-3">Henüz sizden tahsilat yapılmayacak. Ödeme yapmak için ödemeler sekmesine gidin.</p>
-
                     <div class="small text-secondary mb-2 d-flex justify-content-between">
                         <span id="calc-breakdown" class="text-decoration-underline">₺@Model.price_per_night.ToString("N0") x 7 gece</span>
                         <span id="base-total-display" class="text-dark">₺0</span>
                     </div>
+                    }
+                    
+                    
                     <div class="small text-secondary mb-3 d-flex justify-content-between">
                         <span class="text-decoration-underline">Hizmet Bedeli</span>
                         <span class="text-dark">₺450</span>

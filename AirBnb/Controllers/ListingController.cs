@@ -76,10 +76,10 @@ public class ListingController : Controller
     // This act is not mandatory but hosts can make it. Even if they keep the blocked area empty, system will accept the form.
     [HttpPost]
     [Authorize(Roles = "Admin,Host")]
-    public IActionResult Create(Listing listing, DateTime availabilityStart, DateTime availabilityEnd)
+    public async Task<IActionResult> Create(Listing listing, DateTime availabilityStart, DateTime availabilityEnd, List<IFormFile>? files)
     {
         _context.Listings.Add(listing);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
 
         if (availabilityStart != DateTime.MinValue && availabilityEnd != DateTime.MinValue && availabilityEnd >= availabilityStart)
         {
@@ -90,9 +90,41 @@ public class ListingController : Controller
                 end_date = DateTime.SpecifyKind(availabilityEnd.Date, DateTimeKind.Utc),
                 is_blocked = false
             });
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
+        if (files != null && files.Count > 0)
+        {
+            var uploadsFolder = Path.Combine(_env.WebRootPath, "uploads");
+            Directory.CreateDirectory(uploadsFolder);
+            
+            foreach (var file in files)
+            {
+                if (file.Length > 0)
+                {
+                    var listingImage = new ListingImage
+                    {
+                        listingId = listing.listId,
+                        imagePath = ""
+                    };
+
+                    _context.ListingImages.Add(listingImage);
+                    await _context.SaveChangesAsync(); 
+
+                    var extension = Path.GetExtension(file.FileName);
+                    var fileName = $"{listing.listId}_{listingImage.listingImageId}{extension}";
+                    var filePath = Path.Combine(uploadsFolder, fileName);
+
+                    await using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
+
+                    listingImage.imagePath = $"/uploads/{fileName}";
+                }
+            }
+            await _context.SaveChangesAsync();
+        }
         return RedirectToAction("Index");
     }
 
@@ -167,6 +199,7 @@ public class ListingController : Controller
     // If there is any reservation exists, because of the restriction rules system first delete the reservation.
     // After the deletion of reservation, systems deletes the listing.
     // Returns the index page.
+    [HttpPost]
     [Authorize(Roles = "Admin,Host")]
     public IActionResult Delete(int id)
     {
@@ -187,6 +220,7 @@ public class ListingController : Controller
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin,Host")]
     public async Task<IActionResult> UploadImage(int id, List<IFormFile> files)
     {
         var listing = await _context.Listings
@@ -210,7 +244,7 @@ public class ListingController : Controller
                 await _context.SaveChangesAsync(); 
 
                 var extension = Path.GetExtension(file.FileName);
-                var fileName = $"{listing.listId}_{listingImage.imageId}{extension}";
+                var fileName = $"{listing.listId}_{listingImage.listingImageId}{extension}";
                 var filePath = Path.Combine(uploadsFolder, fileName);
 
                 using (var stream = new FileStream(filePath, FileMode.Create))
@@ -223,6 +257,6 @@ public class ListingController : Controller
         }
 
         await _context.SaveChangesAsync();
-        return RedirectToAction("Details", new { id });
+        return RedirectToAction("Detail", new { id });
     }
 }

@@ -129,7 +129,7 @@ namespace AirBnb.Controllers
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, adminPrincipal);
 
                 TempData["SuccessMessage"] = "Test Admin'i girişi yapıldı!";
-                return RedirectToAction("Index", "Reservation");
+                return RedirectToAction("Index", "Home");
             }
 
             var user = _context.Users.FirstOrDefault(u => u.email == username);

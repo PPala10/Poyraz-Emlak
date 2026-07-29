@@ -1,3 +1,4 @@
+@using System.Security.Claims
 @model AirBnb.Data.Listing
 
 @{
@@ -6,24 +7,32 @@
 
 <div class="container mt-4" style="max-width: 750px;">
     <div class="card border-0 shadow-sm surface-card rounded-4 p-4 bg-white">
-        <form action="/Listing/Create" method="post">
+        <form action="/Listing/Create" method="post" enctype="multipart/form-data">
             
             <div class="mb-3">
                 <label class="form-label fw-bold small text-secondary">Ev Sahibi</label>
-                <select name="hostId" class="form-select rounded-3" required>
-                    <option value="">-- Ev Sahibi Seçiniz --</option>
-                    @if (ViewBag.Hosts != null)
-                    {
-                        var hostList = ViewBag.Hosts as List<AirBnb.Data.User>;
-                        if (hostList != null && hostList.Any())
+                @if (User.IsInRole("Host"))
+                {
+                    <input type="text" class="form-control rounded-3 bg-light" value="@User.Identity?.Name" readonly />
+                    <input type="hidden" name="hostId" value="@User.FindFirst(ClaimTypes.NameIdentifier)?.Value" />
+                }
+                else
+                {
+                    <select name="hostId" class="form-select rounded-3" required>
+                        <option value="">-- Ev Sahibi Seçiniz --</option>
+                        @if (ViewBag.Hosts != null)
                         {
-                            foreach (var host in hostList)
+                            var hostList = ViewBag.Hosts as List<AirBnb.Data.User>;
+                            if (hostList != null && hostList.Any())
                             {
-                                <option value="@host.userId">@host.fname @host.lname</option>
+                                foreach (var host in hostList)
+                                {
+                                    <option value="@host.userId">@host.fname @host.lname</option>
+                                }
                             }
                         }
-                    }
-                </select>
+                    </select>
+                }
             </div>
 
             <div class="mb-3">
@@ -86,13 +95,33 @@
                 </div>
             </div>
 
-            <div class="mb-4">
+            <div class="mb-3">
                 <label class="form-label fw-bold small text-secondary">Sunulan İmkanlar (Virgülle ayırın)</label>
                 <input type="text" name="amenities" class="form-control rounded-3" placeholder="Wi-Fi, Havuz, Klima, Otopark">
             </div>
 
+            <div class="mb-4">
+                <label class="form-label fw-bold small text-secondary">
+                    <i class="bi bi-images me-1 text-primary"></i> İlan Fotoğrafları
+                </label>
+
+                <div id="imagePreviewGrid" class="d-flex flex-wrap gap-2 mb-2"></div>
+
+                <button type="button" id="addImageBtn" class="btn btn-outline-primary btn-sm rounded-3">
+                    <i class="bi bi-plus-lg"></i> Resim Ekle
+                </button>
+
+                <input type="file" id="hiddenFileInput" accept="image/*" multiple style="display:none;">
+
+                <div class="form-text small text-muted mt-1" id="fileCountText">
+                    Henüz resim seçilmedi.
+                </div>
+            </div>
+
             <div class="bg-light rounded-4 p-3 mb-4">
-                <h6 class="fw-bold text-dark mb-3 small text-uppercase"><i class="bi bi-calendar3 me-2 text-primary"></i>İlk Müsaitlik Takvimi Aktivasyonu</h6>
+                <h6 class="fw-bold text-dark mb-3 small text-uppercase">
+                    <i class="bi bi-calendar3 me-2 text-primary"></i>İlk Müsaitlik Takvimi Aktivasyonu
+                </h6>
                 <div class="row g-3">
                     <div class="col-6">
                         <label class="form-label small text-muted fw-semibold">Giriş Yapılabilecek İlk Tarih</label>
@@ -114,3 +143,90 @@
         </form>
     </div>
 </div>
+@section Scripts {
+<script>
+    let selectedFiles = []; 
+
+    const addBtn = document.getElementById('addImageBtn');
+    const hiddenInput = document.getElementById('hiddenFileInput');
+    const previewGrid = document.getElementById('imagePreviewGrid');
+    const fileCountText = document.getElementById('fileCountText');
+    const form = document.querySelector('form');
+
+    addBtn.addEventListener('click', () => hiddenInput.click());
+
+    const MAX_IMAGES = 3;
+
+    hiddenInput.addEventListener('change', (e) => {
+        const newFiles = Array.from(e.target.files);
+        const remainingSlots = MAX_IMAGES - selectedFiles.length;
+
+        if (remainingSlots <= 0) {
+            alert(`En fazla ${MAX_IMAGES} resim seçebilirsiniz.`);
+            hiddenInput.value = "";
+            return;
+        }
+
+        if (newFiles.length > remainingSlots) {
+            alert(`En fazla ${MAX_IMAGES} resim seçebilirsiniz. Sadece ilk ${remainingSlots} resim eklendi.`);
+        }
+
+        selectedFiles = selectedFiles.concat(newFiles.slice(0, remainingSlots));
+        hiddenInput.value = "";
+        renderPreview();
+    });
+
+    function renderPreview() {
+        previewGrid.innerHTML = "";
+
+        selectedFiles.forEach((file, index) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const wrapper = document.createElement('div');
+                wrapper.style.cssText = "position:relative; width:90px; height:90px;";
+                wrapper.innerHTML = `
+                    <img src="${e.target.result}" style="width:100%; height:100%; object-fit:cover; border-radius:8px; border:1px solid #dee2e6;">
+                    <button type="button" data-index="${index}" class="remove-btn"
+                        style="position:absolute; top:-6px; right:-6px; width:22px; height:22px; border-radius:50%; background:#dc3545; color:white; border:none; font-size:12px; line-height:1;">
+                        &times;
+                    </button>
+                `;
+                previewGrid.appendChild(wrapper);
+
+                wrapper.querySelector('.remove-btn').addEventListener('click', (ev) => {
+                    const idx = parseInt(ev.currentTarget.dataset.index);
+                    selectedFiles.splice(idx, 1);
+                    renderPreview();
+                });
+            };
+            reader.readAsDataURL(file);
+        });
+
+        fileCountText.textContent = selectedFiles.length > 0
+            ? `${selectedFiles.length} resim seçildi.`
+            : "Henüz resim seçilmedi.";
+    }
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+
+        formData.delete('files');
+        selectedFiles.forEach(file => {
+            formData.append('files', file);
+        });
+
+        fetch(form.action, {
+            method: 'POST',
+            body: formData
+        }).then(response => {
+            if (response.redirected) {
+                window.location.href = response.url;
+            } else {
+                window.location.reload();
+            }
+        });
+    });
+</script>
+}
