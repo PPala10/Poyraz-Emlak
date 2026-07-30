@@ -84,7 +84,6 @@ public class UserController : Controller
         user.lname = updatedUser.lname;
         user.email = updatedUser.email;
         user.phone = updatedUser.phone;
-        user.updated_at = DateTime.UtcNow;
         user.role = updatedUser.role;              
         user.is_verified = updatedUser.is_verified; 
         user.avatar_url = updatedUser.avatar_url;   

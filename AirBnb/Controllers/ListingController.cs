@@ -79,6 +79,8 @@ public class ListingController : Controller
     [Authorize(Roles = "Admin,Host")]
     public async Task<IActionResult> Create(Listing listing, DateTime availabilityStart, DateTime availabilityEnd, List<IFormFile>? files)
     {
+        listing.created_at = DateTime.UtcNow;
+        listing.updated_at = DateTime.UtcNow;
         _context.Listings.Add(listing);
         await _context.SaveChangesAsync();
 
