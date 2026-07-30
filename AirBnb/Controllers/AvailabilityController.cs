@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AirBnb.Data;
 using AirbnbClone.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AirBnb.Controllers;
 
@@ -18,6 +19,7 @@ public class AvailabilityController : Controller
     // Main availability page (index) view method.
     // Any user role can view all the availability ranges for listings, there is no restriction.
     // It shows all open and busy ranges from schedule which determined by hosts and exists reservations.
+    [Authorize]
     public IActionResult Index()
     {
         var listings = _context.Listings

@@ -4,6 +4,7 @@ using AirBnb.Data;
 using AirBnb.Models;
 using AirbnbClone.Data;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AirBnb.Controllers
 {
@@ -17,6 +18,7 @@ namespace AirBnb.Controllers
             _context = context;
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
             var model = new Dashboard();

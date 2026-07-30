@@ -4,6 +4,7 @@ using AirbnbClone.Data;
 using Iyzipay;
 using Iyzipay.Model;
 using Iyzipay.Request;
+using Microsoft.AspNetCore.Authorization;
 using Payment = AirBnb.Data.Payment;
 
 namespace AirBnb.Controllers
@@ -33,6 +34,7 @@ namespace AirBnb.Controllers
         // Main user page (index) view method.
         // This pages shows all reservations which their payments completed and their iyzico's number 
         [HttpGet]
+        [Authorize]
         public IActionResult Index()
         {
             var payments = _context.Payments
@@ -53,6 +55,7 @@ namespace AirBnb.Controllers
         // If initialization is successful, it passes the form content to the View;
         // otherwise, it redirects to the Reservation page with an error.
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> CheckOut(int reservationId)
         {
             var reservation = _context.Reservations
@@ -135,6 +138,7 @@ namespace AirBnb.Controllers
         // It then creates and persists a new Payment record in the database with the transaction details.
         // Redirects to the Reservation page with a success message on completion, or an error message if verification fails.
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Callback([FromForm] string token, [FromQuery] int reservationId)
         {
             try

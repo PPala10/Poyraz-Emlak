@@ -30,6 +30,7 @@ public class UserController : Controller
    
     // Register page for adding new users in Database.
     [HttpGet]
+    [Authorize]
     public IActionResult Register()
     {
         return View();
@@ -39,6 +40,7 @@ public class UserController : Controller
     // If admin forgets to select avatar for a user, system assigns default avatar image.
     // Returns the index page.
     [HttpPost]
+    [Authorize]
     public IActionResult Register(User newUser)
     {
         newUser.is_verified = true;
@@ -57,6 +59,7 @@ public class UserController : Controller
     
     // Edit page for editing users' attributes in Database.
     [HttpGet]
+    [Authorize]
     public IActionResult Edit(int id)
     {
         var user = _context.Users.FirstOrDefault(u => u.userId == id);
@@ -70,6 +73,7 @@ public class UserController : Controller
     // Any attribute in a user entity can be manipulated in Edit form.
     // Returns the index page.
     [HttpPost]
+    [Authorize]
     public IActionResult Edit(User updatedUser)
     {
         
@@ -97,6 +101,7 @@ public class UserController : Controller
     // After the deletion of listings, systems deletes the user.
     // Returns the index page.
     [HttpPost]
+    [Authorize]
     public IActionResult Delete(int id)
     {
         var user = _context.Users.FirstOrDefault(u => u.userId == id);

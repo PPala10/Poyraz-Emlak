@@ -20,6 +20,7 @@ public class ReviewController : Controller
     // Any user role can view all the reviews, there is no restriction.
     // Page shows all reviews with guest which creates the review, rating and review itself.
     [HttpGet]
+    [Authorize]
     public IActionResult Index()
     {
         var reviews = _context.Reviews
@@ -36,6 +37,7 @@ public class ReviewController : Controller
     // Each user only create review for their reservation and each reservation has only one review from one user.
     // System first check user's reservations by id based standards.
     [HttpGet]
+    [Authorize]
     public IActionResult Create(int reservationId)
     {
         var reservation = _context.Reservations
@@ -64,6 +66,7 @@ public class ReviewController : Controller
     // Review created with using user inputs and system added it to the Database.
     // It returns the detail page of listing which published review about it.
     [HttpPost]
+    [Authorize]
     public IActionResult Create(int reservationId, int rating, string comment)
     {
         var reservation = _context.Reservations

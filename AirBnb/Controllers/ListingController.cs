@@ -36,6 +36,7 @@ public class ListingController : Controller
     // In detail page guests can create reservations; thus, system pushes the guest list to the view.
     // In order to make reservation user must be guest and verification must be true and listing must be active.
     [HttpGet]
+    [Authorize]
     public IActionResult Detail(int id)
     {
         var listing = _context.Listings

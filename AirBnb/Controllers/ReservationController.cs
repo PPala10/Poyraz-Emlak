@@ -57,6 +57,7 @@ namespace AirBnb.Controllers
         // Reservation saved on a Database with relating attributes, price and status = "Pending"
         // Pending status stayed on Database until payment proceeded.
         [HttpPost]
+        [Authorize]
         public IActionResult Book(int listingId, int guestId, DateTime checkin_date, DateTime checkout_date)
         {
             var currentListing = _context.Listings.FirstOrDefault(l => l.listId == listingId);
@@ -129,6 +130,7 @@ namespace AirBnb.Controllers
         // If they match, system deletes the reservation from Database.
         // This action can be executed all roles of users.
         [HttpPost]
+        [Authorize]
         public IActionResult Cancel(int id)
         {
             var reservation = _context.Reservations.FirstOrDefault(r => r.reservationId == id);
